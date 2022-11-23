@@ -33,10 +33,29 @@ The commit message should be structured as follows:
 
 ## Project creation
 
-```shell
-npm install -g nx
-npx create-nx-workspace@latest --name sushi-go-party \
-  --preset=next --appName website --style=css --nxCloud false
+The project uses the following technologies (read about them before working on
+this project):
 
-npm start
+- nx
+- next
+- react
+- koa
+
+deploying on Vercel: <https://nx.dev/recipes/other/deploy-nextjs-to-vercel>
+
+nx overview
+
+```shell
+# initialize monorepo
+npx create-nx-workspace@latest --name sushi-go-party \
+  --preset=next --appName website --style=css --nxCloud false \
+  && cd sushi-go-party
+# generate application
+nx generate @nrwl/node:application server
+# add dependency (nx will resolve package level)
+npm i koa @koa/router @koa/cors
+npm i -D @types/koa @types/koa__router @types/koa__cors
+
+npm start website
+npm start server
 ```
