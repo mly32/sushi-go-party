@@ -1,0 +1,29 @@
+.sushi-go-card {
+  background-image: url(/assets/cards.jpg);
+}
+
+.sushi-go-tile {
+  background-image: url(/assets/tiles.jpg);
+}
+
+.container {
+  max-width: 1200px;
+  max-height: 720px;
+  overflow: scroll;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: fit-content;
+}
+
+.limited-col-container {
+  display: flex;
+  flex-direction: column-reverse;
+  width: fit-content;
+  height: fit-content;
+  overflow: scroll;
+  height: 400px;
+}

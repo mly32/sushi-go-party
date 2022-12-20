@@ -16,13 +16,7 @@ node_modules
 *.launch
 .settings/
 *.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode
 
 # misc
 /.sass-cache
@@ -40,3 +34,6 @@ Thumbs.db
 
 # Next.js
 .next
+
+# Project specific ignores
+.env.local

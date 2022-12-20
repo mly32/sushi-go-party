@@ -5,13 +5,15 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "lint": "nx run-many --all --target=lint"
   },
   "private": true,
   "dependencies": {
     "@koa/cors": "^4.0.0",
     "@koa/router": "^12.0.0",
     "@nrwl/next": "15.2.1",
+    "boardgame.io": "^0.50.2",
     "core-js": "^3.6.5",
     "koa": "^2.13.4",
     "next": "13.0.0",
