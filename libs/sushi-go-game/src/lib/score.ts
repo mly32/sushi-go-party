@@ -1,6 +1,6 @@
 import * as C from './constants';
-import * as U from './utils';
 import * as M from './move';
+import * as U from './utils';
 
 const playerObj = <T>(G: C.GameState, f: (x: C.PlayerID) => T) => {
   return Object.fromEntries(G.playOrder.map((x) => [x, f(x)]));

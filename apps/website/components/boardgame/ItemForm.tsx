@@ -1,5 +1,5 @@
-import { ChangeEventHandler } from 'react';
 import { C, U } from '@sushi-go-party/sushi-go-game';
+import { ChangeEventHandler } from 'react';
 
 export interface ItemFormProps {
   G: C.GameState;

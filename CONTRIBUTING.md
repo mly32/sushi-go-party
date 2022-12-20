@@ -40,6 +40,7 @@ this project):
 - next
 - react
 - koa
+- boardgame.io
 
 deploying on Vercel: <https://nx.dev/recipes/other/deploy-nextjs-to-vercel>
 
@@ -58,4 +59,11 @@ npm i -D @types/koa @types/koa__router @types/koa__cors
 
 npm start website
 npm start server
+```
+
+building website
+
+```shell
+nx build website --prod
+next start dist/apps/website
 ```

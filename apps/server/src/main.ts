@@ -1,7 +1,8 @@
-import * as Koa from 'koa';
-import * as Router from '@koa/router';
-import * as cors from '@koa/cors';
 import { AddressInfo } from 'net';
+
+import * as cors from '@koa/cors';
+import * as Router from '@koa/router';
+import * as Koa from 'koa';
 
 interface Game {
   id: string;

@@ -1,6 +1,7 @@
-import styles from './index.module.css';
-import { CSSProperties } from 'react';
 import { C, U } from '@sushi-go-party/sushi-go-game';
+import { CSSProperties } from 'react';
+
+import styles from './styles.module.css';
 
 const tileSizeInfo = [
   [2055, 5],

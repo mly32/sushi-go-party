@@ -1,12 +1,12 @@
+import { C, U, V } from '@sushi-go-party/sushi-go-game';
 import type { BoardProps } from 'boardgame.io/react';
 import { useState } from 'react';
-import { C, U, V } from '@sushi-go-party/sushi-go-game';
 
-import styles from './index.module.css';
-import ItemForm from './ItemForm';
 import { ListAction } from './Card';
 import CardList from './CardList';
+import ItemForm from './ItemForm';
 import Selection from './Selection';
+import styles from './styles.module.css';
 
 type SushiGoBoardProps = BoardProps<C.GameState>;
 

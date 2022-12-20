@@ -6,10 +6,11 @@ import type {
   FnContext,
 } from 'boardgame.io';
 import { ActivePlayers, INVALID_MOVE, Stage } from 'boardgame.io/core';
+
 import * as C from './constants';
-import * as U from './utils';
 import * as M from './move';
 import * as S from './score';
+import * as U from './utils';
 import * as V from './valid';
 
 type PluginAPIs = Record<string, never>;

@@ -1,6 +1,6 @@
 import * as C from './constants';
-import * as V from './valid';
 import * as U from './utils';
+import * as V from './valid';
 
 const updateSpecials = (
   G: C.GameState,

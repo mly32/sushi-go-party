@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import styles from './index.module.css';
 
 const backend = 'http://localhost:4201';
 
@@ -31,7 +30,7 @@ export function Game(props: GameProps) {
   );
 
   return (
-    <div className={styles['container']}>
+    <div>
       <h1>Welcome to Game!</h1>
       <input value={search} onChange={onSetSearch} />
       <p>id: {game === null ? 'loading' : game.id}</p>
