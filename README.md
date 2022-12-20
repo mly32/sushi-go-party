@@ -1,94 +1,21 @@
 # sushi-go-party
 
-## Game Logic
+A fullstack app for playing Sushi Go Party with friends.
 
-Game state:
+## Docs
 
-```mermaid
-%%{ init: {
-  "theme": "neutral",
-  "flowchart": { },
-  "sequence": { }
-} }%%
+See [CONTRIBUTING](./CONTRIBUTING.md) for getting started.
 
-stateDiagram-v2
-  accTitle: Game State
-  state "setup" as 1
-  state "play" as 2
-  state "action" as 3
-  state "rotate" as 4
-  state "score" as 5
+Read the game library's [README](./libs/sushi-go-game/README.md) to understand
+the game logic.
 
-  [*] --> 1
+## Credits
 
-  1 --> 2
+This project is based on and uses assets from the original Sushi Go Party game.
 
-  2 --> 3: special > 0
-  2 --> 4: special = 0
+It, however, has no affiliation with
 
-  3 --> 4
-
-  4 --> 2: hand > 0
-  4 --> 5: hand = 0
-
-  5 --> 1: round < 3
-  5 --> [*]: round = 3
-```
-
-Card interactions:
-
-- during play
-
-  - special order: choose to copy from cards played before this turn
-    - if special action, add to special queue (cannot select special action)
-  - chopsticks: if as bonus action, add to special queue
-  - spoon: if as bonus action, add to special queue
-  - menu: add to special queue
-  - takeout box: add to special queue
-  - other cards: add to tray
-
-- during special action
-
-  - chopsticks
-    1. choose to play from own hand
-       - if special order, copy
-       - if special action, add to special queue
-    2. move to own hand
-  - spoon
-    1. choose to play by name and obtain from other's hand if match
-       - if special order, copy
-       - if special action, add to special queue
-    2. move to other's hand
-       - if no match, discard
-  - menu
-    1. choose to play from menu hand
-       - if special order, copy
-       - if special action (non-menu), add to special queue
-    2. move to discard
-  - takeout box
-    1. choose to flip (can be more than one) from cards played before this turn
-    2. move to discard
-
-- during card rotate
-
-  - uramaki: if criteria met, discard
-  - miso soup: if criteria met, discard
-
-- during score
-
-  - wasabi: if criteria met, multiply nigiri score
-
-Card states
-
-- normal (in hand, menu hand, or tray)
-- discarded
-  - if special order failed, discard
-  - after special card actions are completed, discard
-  - after criteria met for uramaki and miso soup, discard
-- copied
-  - after special order is changed, revert when returning to deck or discard
-- flipped
-  - after cards are flipped, revert when returning to deck or discard
-- copied and flipped: both copy and flip revert to special order on discard
-  - flipped a copied card => `t: [flipped], c: [i, 'table'], f: [i, 'fake']`
-  - copied a flipped card => `t: [flipped], c: [i, 'table'], f: []`
+- [Phil Walker-Harding](https://www.philwalkerharding.com/) (the game's
+  creator),
+- [Nan Rangsima](https://www.behance.net/anpannan) (the game's artist),
+- [Gamewright](https://gamewright.com/) (the game's publisher).

@@ -23,7 +23,7 @@ export interface SelectionProps {
 const Selection = ({ numPlayers, list }: SelectionProps) => {
   return (
     <div className={styles['row-container']}>
-      {list.map((tile) => {
+      {list.map((tile, index) => {
         const position = C.tilePosition[tile](numPlayers);
         const info: CSSProperties = {
           backgroundSize: `${tileSizeInfo[1][1] * 100}%`,
@@ -33,7 +33,7 @@ const Selection = ({ numPlayers, list }: SelectionProps) => {
           width: tileSize[1] * scale,
         };
         return (
-          <div key={tile}>
+          <div key={index}>
             <div
               role="img"
               aria-label={U.tileLabel(tile)}

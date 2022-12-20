@@ -160,7 +160,7 @@ export const validSpoonResponseMove = (
   }
 };
 
-const validGroupCounts: Record<C.Group, number> = {
+export const validGroupCounts: Record<C.Group, number> = {
   Flipped: 0,
   Nigiri: 1,
   SushiRolls: 1,
@@ -194,10 +194,14 @@ const validSelection = (players: number, selection: readonly C.Tile[]) => {
     }
   });
 
-  return true;
+  return selection.length === new Set(selection).size;
 };
 
 export const validSetup = (setupData: C.SetupData) => {
-  const selection = C.selectionToSelectionInfo[setupData.selection].selection;
+  if (setupData.selectionName === 'Custom') {
+    return validSelection(setupData.numPlayers, setupData.customSelection);
+  }
+  const selection =
+    C.selectionToSelectionInfo[setupData.selectionName].selection;
   return validSelection(setupData.numPlayers, selection);
 };

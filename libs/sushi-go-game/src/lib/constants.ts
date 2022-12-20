@@ -352,8 +352,9 @@ export type Phase =
   | 'scorePhase';
 
 export interface SetupData {
-  selection: Selection;
   numPlayers: number;
+  selectionName: Selection;
+  customSelection: Tile[];
 }
 
 export interface PlayerScore {

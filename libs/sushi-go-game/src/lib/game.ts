@@ -129,12 +129,24 @@ const validateSetupData: Game['validateSetupData'] = (
 
 const setup: Game['setup'] = (
   { ctx },
-  setupData = { selection: 'Custom', numPlayers: ctx.numPlayers }
+  setupData = {
+    selectionName: 'My First Meal',
+    numPlayers: ctx.numPlayers,
+    customSelection: [],
+  }
 ) => {
-  const selection =
-    process.env.NX_DEBUG === 'true'
-      ? debugSelection
-      : C.selectionToSelectionInfo[setupData.selection].selection;
+  if (validateSetupData(setupData, ctx.numPlayers) !== undefined) {
+    throw new Error(`Invalid setup ${JSON.stringify(setupData)}`);
+  }
+
+  let selection = C.selectionToSelectionInfo[setupData.selectionName].selection;
+
+  if (setupData.selectionName === 'Custom') {
+    selection = setupData.customSelection;
+  }
+  if (process.env.NX_DEBUG === 'true') {
+    selection = debugSelection;
+  }
 
   const players = Object.fromEntries(
     ctx.playOrder.map((x): [C.PlayerID, C.PlayerState] => [
@@ -163,7 +175,7 @@ const setup: Game['setup'] = (
     process.env.NX_DEBUG === 'true' ? 4 : C.cardAmounts[ctx.numPlayers];
 
   const G: C.GameState = {
-    selectionName: setupData.selection,
+    selectionName: setupData.selectionName,
     selection,
     playOrder: ctx.playOrder,
     players,

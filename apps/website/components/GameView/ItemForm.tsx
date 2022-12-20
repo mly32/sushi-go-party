@@ -8,8 +8,7 @@ export interface ItemFormProps {
 }
 const ItemForm = ({ G, item, setItem }: ItemFormProps) => {
   const itemType: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const target = e.target as HTMLInputElement;
-    if (target.value === 'tile') {
+    if (e.target.value === 'tile') {
       setItem({ kind: 'tile', tile: 'Flipped' });
     } else {
       setItem({ kind: 'card', card: 'Flipped' });

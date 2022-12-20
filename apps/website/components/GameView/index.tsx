@@ -6,7 +6,11 @@ import { useEffect, useState } from 'react';
 import { SushiGoBoard } from './Board';
 import styles from './styles.module.css';
 
-const SushiGoPage = () => {
+export interface GameViewProps {
+  setupData: C.SetupData;
+}
+
+const GameView = ({ setupData }: GameViewProps) => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     setLoaded(true);
@@ -15,11 +19,6 @@ const SushiGoPage = () => {
   if (!loaded) {
     return <div></div>;
   }
-
-  const setupData: C.SetupData = {
-    selection: 'Master Menu',
-    numPlayers: 2,
-  };
 
   const GameWithSetup = {
     ...Game.SushiGo,
@@ -52,4 +51,4 @@ const SushiGoPage = () => {
   );
 };
 
-export default SushiGoPage;
+export default GameView;

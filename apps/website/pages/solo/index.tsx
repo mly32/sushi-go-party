@@ -1,3 +1,3 @@
-import SushiGoPage from '../../components/boardgame';
+import Lobby from '../../components/Lobby';
 
-export default SushiGoPage;
+export default Lobby;

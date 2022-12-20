@@ -70,7 +70,6 @@ export const moveCard = (
   const to = U.stateLoc(G, toLoc, y);
 
   if (moveIndex < 0 || moveIndex >= from.length) {
-    console.log('move error', x, fromLoc, y, toLoc, moveIndex, copyIndex);
     throw new Error(`Invalid moveIndex: ${moveIndex}`);
   }
   let movedCard: C.Card = from.splice(moveIndex, 1).pop();
