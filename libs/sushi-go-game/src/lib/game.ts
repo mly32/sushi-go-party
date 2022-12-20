@@ -14,7 +14,8 @@ import * as U from './utils';
 import * as V from './valid';
 
 type PluginAPIs = Record<string, never>;
-export type Game = BGGame<C.GameState, PluginAPIs, C.SetupData>;
+type Game = BGGame<C.GameState, PluginAPIs, C.SetupData>;
+
 type PhaseConfig = Omit<BGPhaseConfig<C.GameState, PluginAPIs>, 'next'> & {
   next?:
     | ((context: FnContext<C.GameState, PluginAPIs>) => C.Phase | void)
@@ -119,7 +120,7 @@ const validateSetupData: Game['validateSetupData'] = (
   setupData,
   numPlayers
 ) => {
-  if (!setupData || process.env.NX_DEBUG === 'true') {
+  if (!setupData || process.env.NX_SUSHI_GO_DEBUG === 'true') {
     return;
   }
   if (numPlayers !== setupData.numPlayers || !V.validSetup(setupData)) {
@@ -144,7 +145,7 @@ const setup: Game['setup'] = (
   if (setupData.selectionName === 'Custom') {
     selection = setupData.customSelection;
   }
-  if (process.env.NX_DEBUG === 'true') {
+  if (process.env.NX_SUSHI_GO_DEBUG === 'true') {
     selection = debugSelection;
   }
 
@@ -172,7 +173,9 @@ const setup: Game['setup'] = (
     .flat();
 
   const maxTurns =
-    process.env.NX_DEBUG === 'true' ? 4 : C.cardAmounts[ctx.numPlayers];
+    process.env.NX_SUSHI_GO_DEBUG === 'true'
+      ? 4
+      : C.cardAmounts[ctx.numPlayers];
 
   const G: C.GameState = {
     selectionName: setupData.selectionName,

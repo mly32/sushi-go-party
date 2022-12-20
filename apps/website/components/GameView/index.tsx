@@ -1,4 +1,4 @@
-import { Game, C } from '@sushi-go-party/sushi-go-game';
+import SushiGo, { C } from '@sushi-go-party/sushi-go-game';
 import { Local } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';
 import { useEffect, useState } from 'react';
@@ -21,8 +21,8 @@ const GameView = ({ setupData }: GameViewProps) => {
   }
 
   const GameWithSetup = {
-    ...Game.SushiGo,
-    setup: (ctx) => Game.SushiGo.setup(ctx, setupData),
+    ...SushiGo,
+    setup: (ctx) => SushiGo.setup(ctx, setupData),
   };
 
   const SushiGoClient = Client({
@@ -37,9 +37,7 @@ const GameView = ({ setupData }: GameViewProps) => {
 
   return (
     <div className={styles['container']}>
-      <div className={styles['row-container']}>
-        <SushiGoClient />
-      </div>
+      <SushiGoClient />
       <div className={styles['row-container']}>
         {[...Array(setupData.numPlayers).keys()].map((x) => (
           <div key={x} style={{ minWidth: '300px', border: '1px solid red' }}>

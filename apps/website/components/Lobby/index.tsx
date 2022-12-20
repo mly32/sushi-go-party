@@ -1,4 +1,4 @@
-import { Game, C, V } from '@sushi-go-party/sushi-go-game';
+import SushiGo, { C, V } from '@sushi-go-party/sushi-go-game';
 import { ChangeEventHandler, useState } from 'react';
 
 import GameView from '../GameView';
@@ -15,7 +15,7 @@ const initialSelection = Object.fromEntries(
 const Lobby = () => {
   const [setupData, setSetupData] = useState<C.SetupData>({
     selectionName: 'My First Meal',
-    numPlayers: Game.SushiGo.minPlayers,
+    numPlayers: SushiGo.minPlayers,
     customSelection: [],
   });
 
@@ -72,8 +72,8 @@ const Lobby = () => {
             type="number"
             placeholder="number of players"
             value={setupData.numPlayers}
-            max={Game.SushiGo.maxPlayers}
-            min={Game.SushiGo.minPlayers}
+            max={SushiGo.maxPlayers}
+            min={SushiGo.minPlayers}
             onChange={setNumPlayers}
           />
         </label>

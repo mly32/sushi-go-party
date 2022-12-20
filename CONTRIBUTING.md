@@ -61,9 +61,11 @@ npm start website
 npm start server
 ```
 
-building website
+building
 
 ```shell
-nx build website --prod
-next start dist/apps/website
+npx nx build website --prod
+npx next start dist/apps/website
+npx nx build server --prod
+node dist/apps/server/main.js
 ```

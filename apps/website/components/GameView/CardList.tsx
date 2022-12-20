@@ -1,6 +1,7 @@
 import { C, U } from '@sushi-go-party/sushi-go-game';
 
 import Card, { ListAction } from './Card';
+import styles from './styles.module.css';
 
 export interface CardListProps {
   G: C.GameState;
@@ -42,13 +43,7 @@ const CardList = ({
     );
 
     return (
-      <li key={index} style={{ border: '1px solid black' }}>
-        {condensed ? (
-          <span>{U.cardLabel(card)}</span>
-        ) : (
-          <Card key={index} card={card} index={index} actions={[]} />
-        )}
-
+      <div key={index} style={{ border: '1px solid black' }}>
         {metaInfo}
         {actions
           .filter(({ enabled }) => enabled(index))
@@ -61,13 +56,32 @@ const CardList = ({
               {label}
             </button>
           ))}
-      </li>
+
+        {condensed ? (
+          <span>{U.cardLabel(card)}</span>
+        ) : (
+          <Card key={index} card={card} index={index} actions={[]} />
+        )}
+      </div>
     );
   };
 
-  const List = ({ list }: { list: C.IndexCard[] }) => (
-    <ul>{list.map(cardInfo)}</ul>
-  );
+  const List = ({ list }: { list: C.IndexCard[] }) => {
+    if (list.length === 0) {
+      return (
+        <div className={styles['hidden']}>
+          <div className={condensed ? '' : styles['row-container']}>
+            {cardInfo({ card: 'Flipped', index: 0 })}
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className={condensed ? '' : styles['row-container']}>
+        {list.map(cardInfo)}
+      </div>
+    );
+  };
 
   if (!U.isDirect(loc)) {
     indexedList.sort(
@@ -88,10 +102,16 @@ const CardList = ({
 
     return (
       <div>
-        <div>{U.locationLabel(loc)}</div>
-        <List list={cards} />
-        <hr style={{ borderTop: '1px solid black' }} />
-        <List list={newCards} />
+        <div className={condensed ? '' : styles['row-container']}>
+          <div>
+            <div>{U.locationLabel(loc)}</div>
+            <List list={cards} />
+          </div>
+          <div>
+            <div>New:</div>
+            <List list={newCards} />
+          </div>
+        </div>
       </div>
     );
   }
