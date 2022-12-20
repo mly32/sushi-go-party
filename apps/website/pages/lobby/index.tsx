@@ -1,8 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { Game } from '@sushi-go-party/sushi-go-game';
 import styles from './index.module.css';
 
 const backend = 'http://localhost:4201';
+
+interface Game {
+  id: string;
+}
 
 export interface GameProps {
   q: string;

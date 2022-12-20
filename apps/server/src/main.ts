@@ -2,7 +2,10 @@ import * as Koa from 'koa';
 import * as Router from '@koa/router';
 import * as cors from '@koa/cors';
 import { AddressInfo } from 'net';
-import type { Game } from '@sushi-go-party/sushi-go-game';
+
+interface Game {
+  id: string;
+}
 
 const PORT = 4201;
 const app = new Koa();
