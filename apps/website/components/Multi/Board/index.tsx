@@ -2,114 +2,43 @@ import { C, U, V } from '@sushi-go-party/sushi-go-game';
 import type { BoardProps } from 'boardgame.io/react';
 import { useState } from 'react';
 
-import { ListAction } from './Card';
-import CardList from './CardList';
-import ItemForm from './ItemForm';
-import Selection from './Selection';
-import styles from './styles.module.css';
+import { ListAction } from '../../GameView/Card';
+import RawCardList, { CardListProps } from '../../GameView/CardList';
+import ItemForm from '../../GameView/ItemForm';
+import Selection from '../../GameView/Selection';
+import styles from '../../GameView/styles.module.css';
 
 type SushiGoBoardProps = BoardProps<C.GameState>;
 
-const CommonDisplay = ({ G, ctx }: SushiGoBoardProps) => {
-  const Logs = () => (
-    <div>
-      <div>logs</div>
-      <div
-        className={[
-          styles['col-container'],
-          styles['reversed-col-container'],
-        ].join(' ')}
-      >
-        {G.log
-          .slice()
-          .reverse()
-          .map(({ playerID, msg }, index) => (
-            <div key={index} style={{ border: '1px solid black' }}>
-              <span style={{ color: 'blue' }}>{playerID || 'Game'}</span>: {msg}
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-
-  if (ctx.gameover !== undefined) {
-    const order: C.PlayerScore[] = ctx.gameover;
-    return (
-      <div className={styles['row-container']}>
-        <div>
-          <div>{order[0].playerID} wins !!!</div>
-          <ol>
-            {order.map(({ playerID: x, score, desserts }) => (
-              <li key={x}>
-                Player {x}: {score} points ({desserts} desserts)
-              </li>
-            ))}
-          </ol>
-        </div>
-        <Logs />
-      </div>
-    );
-  }
-
-  const playerDisplay = G.playOrder.map((x) => {
-    const active = ctx.activePlayers && ctx.activePlayers[x] !== undefined;
-    const scoreDiff = G.players[x].estimatedScore - G.players[x].score;
-    return (
-      <div key={x} style={{ minWidth: '300px', border: '1px solid blue' }}>
-        <div>Player: {x}</div>
-        <div>score: {G.players[x].score}</div>
-        <div>
-          estimated: {scoreDiff >= 0 && '+'}
-          {scoreDiff >= 0 ? scoreDiff : scoreDiff}
-        </div>
-        <div>active: {active ? 'yes' : 'no'}</div>
-        <hr style={{ borderTop: '1px solid blue' }} />
-        <div>
-          <CardList G={G} loc="fridge" x={x} />
-          <CardList
-            G={G}
-            loc="tray"
-            x={x}
-            last={{ add: G.players[x].confirmed, card: 'Flipped' }}
-          />
-        </div>
-      </div>
-    );
-  });
-
-  return (
-    <div className={styles['row-container']}>
-      <div>
-        <div>selection: {G.selectionName}</div>
-        <div>
-          round: {G.round.current}/{G.round.max}
-        </div>
-        <div>phase: {U.phaseLabel(ctx.phase as C.Phase)}</div>
-        <div>
-          turn: {G.turn.current}/{G.turn.max}
-        </div>
-        <div>
-          special stage: {G.specialIndex + 1}/{G.specials.length}
-        </div>
-        <div>deck size: {G.deck.length}</div>
-
-        {G.turn.turnInfo.playerID !== '' && (
-          <div>
-            Player {G.turn.turnInfo.playerID} requests:{' '}
-            {U.spoonLabel(G.turn.turnInfo.spoonInfo)}
-          </div>
-        )}
-        <Selection numPlayers={G.playOrder.length} list={G.selection} />
-        <div>
-          <CardList G={G} loc="discard" />
-        </div>
-
-        <div className={styles['row-container']}>{playerDisplay}</div>
-      </div>
-      <Logs />
-    </div>
-  );
+const arrayRotate = <T,>(arr: T[], n: number) => {
+  n = ((n % arr.length) + arr.length) % arr.length;
+  return arr.slice(n, arr.length).concat(arr.slice(0, n));
 };
+
+const CardList = (props: CardListProps) => {
+  return <RawCardList {...{ ...props, condensed: false }} />;
+};
+
+const Logs = ({ G }: SushiGoBoardProps) => (
+  <div>
+    <div>logs</div>
+    <div
+      className={[
+        styles['col-container'],
+        styles['reversed-col-container'],
+      ].join(' ')}
+    >
+      {G.log
+        .slice()
+        .reverse()
+        .map(({ playerID, msg }, index) => (
+          <div key={index} style={{ border: '1px solid black' }}>
+            <span style={{ color: 'blue' }}>{playerID || 'Game'}</span>: {msg}
+          </div>
+        ))}
+    </div>
+  </div>
+);
 
 const PlayPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
   const [playInfo, setPlayInfo] = useState(C.emptyPlayInfo);
@@ -173,7 +102,6 @@ const PlayPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
 
   return (
     <div>
-      <h3>Player: {x}</h3>
       {active && <button onClick={confirm}>confirm</button>}
       <CardList
         G={G}
@@ -181,7 +109,6 @@ const PlayPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
         x={x}
         actions={[handAction, selectedHandAction]}
       />
-
       <CardList
         G={G}
         loc="tray"
@@ -220,10 +147,9 @@ const SpoonStage = ({ G, moves, playerID: x }: SushiGoBoardProps) => {
 
   return (
     <div>
-      <h3>Player: {x}</h3>
-      <div>spoon request for a {U.spoonLabel(G.turn.turnInfo.spoonInfo)}</div>
       <button onClick={confirm}>confirm</button>
       <CardList G={G} loc="hand" x={x} actions={[spoonAction]} />
+      <CardList G={G} loc="tray" x={x} />
     </div>
   );
 };
@@ -235,17 +161,6 @@ const ActionPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
   });
   const active = ctx.activePlayers && ctx.activePlayers[x] !== undefined;
   const specialTile = C.cardToTile[G.specials[G.specialIndex].card];
-
-  if (G.specials[G.specialIndex].playerID !== x) {
-    return (
-      <div>
-        <h3>Player: {x}</h3>
-        <div>... not active</div>
-        <CardList G={G} loc="hand" x={x} />
-        <CardList G={G} loc="tray" x={x} />
-      </div>
-    );
-  }
 
   const confirm = () => {
     if (!V.validSpecialMove(G, x, specialInfo)) {
@@ -341,14 +256,13 @@ const ActionPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
 
   return (
     <div>
-      <h3>Player: {x}</h3>
       <div>{specialTile} action</div>
+      {active && <button onClick={confirm}>confirm</button>}
       {active && specialTile === 'TakeoutBox' && (
         <div>
           flipping {specialInfo.flipList.length}/{flipNumber}
         </div>
       )}
-      {active && <button onClick={confirm}>confirm</button>}
       {active && specialTile === 'Menu' && (
         <CardList G={G} loc="menuHand" x={x} actions={[menuAction]} />
       )}
@@ -378,20 +292,10 @@ const ActionPhase = ({ G, ctx, moves, playerID: x }: SushiGoBoardProps) => {
 
 const ScorePhase = ({ ctx, G, moves, playerID: x }: SushiGoBoardProps) => {
   const active = ctx.activePlayers && ctx.activePlayers[x] !== undefined;
-
   const confirm = moves.scoreMove;
-  const scoreDiff = G.players[x].estimatedScore - G.players[x].score;
 
   return (
     <div>
-      <div>
-        <h3>Player: {x}</h3>
-        <div>score: {G.players[x].score}</div>
-        <div>
-          estimated: {scoreDiff >= 0 && '+'}
-          {scoreDiff >= 0 ? scoreDiff : scoreDiff}
-        </div>
-      </div>
       {active ? (
         <button onClick={confirm}>confirm</button>
       ) : (
@@ -403,35 +307,152 @@ const ScorePhase = ({ ctx, G, moves, playerID: x }: SushiGoBoardProps) => {
   );
 };
 
-const PlayerDisplay = (props: SushiGoBoardProps) => {
-  const { ctx } = props;
-  switch (ctx.phase as C.Phase) {
-    case 'playPhase':
-      return <PlayPhase {...props} />;
-    case 'actionPhase':
-      if (
-        ctx.activePlayers &&
-        ctx.activePlayers[props.playerID] === 'spoonStage'
-      ) {
-        return <SpoonStage {...props} />;
-      }
-      return <ActionPhase {...props} />;
-    case 'scorePhase':
-      return <ScorePhase {...props} />;
-    default:
-      return <div>game over</div>;
-  }
-};
+interface ViewProps {
+  board: SushiGoBoardProps;
+  playerID: C.PlayerID;
+}
 
-export const SushiGoBoard = (props: SushiGoBoardProps) => {
-  if (props.playerID === null) {
-    return CommonDisplay(props);
-  }
+const PlayerView = ({ board, playerID }: ViewProps) => {
+  const { G, ctx, playerID: x, matchData } = board;
+  const SimpleView = () => (
+    <div>
+      <CardList
+        G={G}
+        loc="tray"
+        x={playerID}
+        last={{
+          add: ctx.phase === 'playPhase' && G.players[playerID].confirmed,
+          card: 'Flipped',
+        }}
+      />
+    </div>
+  );
+
+  const PlayerInfo = () => {
+    switch (ctx.phase as C.Phase) {
+      case 'playPhase':
+        return <PlayPhase {...board} />;
+      case 'actionPhase':
+        if (ctx.activePlayers && ctx.activePlayers[playerID] === 'spoonStage') {
+          return <SpoonStage {...board} />;
+        }
+        if (G.specials[G.specialIndex].playerID === playerID) {
+          return <ActionPhase {...board} />;
+        }
+        return <SimpleView />;
+      case 'scorePhase':
+        return <ScorePhase {...board} />;
+      default:
+        return <SimpleView />;
+    }
+  };
 
   return (
-    <PlayerDisplay
-      key={`${props.ctx.phase}p${props.G.round.current}r${props.G.turn.current}t`}
-      {...props}
-    />
+    <div>
+      <div>player: {matchData ? matchData[playerID].name : playerID}</div>
+      {matchData && !matchData[playerID].isConnected && (
+        <div>NOT CONNECTED</div>
+      )}
+      {x === playerID ? <PlayerInfo /> : <SimpleView />}
+    </div>
   );
 };
+
+const ScoreView = ({ board, playerID: x }: ViewProps) => {
+  const { G, ctx, matchData } = board;
+  const active = ctx.activePlayers && ctx.activePlayers[x] !== undefined;
+  const scoreDiff = G.players[x].estimatedScore - G.players[x].score;
+  return (
+    <div key={x} style={{ border: '1px solid blue' }}>
+      <div>Player: {matchData ? matchData[x].name : x}</div>
+      <div>score: {G.players[x].score}</div>
+      <div>
+        estimated: {scoreDiff >= 0 && '+'}
+        {scoreDiff >= 0 ? scoreDiff : scoreDiff}
+      </div>
+      <div>active: {active ? 'yes' : 'no'}</div>
+    </div>
+  );
+};
+
+const SushiGoBoard = (props: SushiGoBoardProps) => {
+  const { G, ctx, playerID, matchID, matchData } = props;
+
+  if (ctx.gameover !== undefined) {
+    const order: C.PlayerScore[] = ctx.gameover;
+    return (
+      <div className={styles['row-container']}>
+        <div>
+          <div>{matchData[order[0].playerID].name} wins !!!</div>
+          <ol>
+            {order.map(({ playerID: x, score, desserts }) => (
+              <li key={x}>
+                Player {matchData[x].name}: {score} points ({desserts} desserts)
+              </li>
+            ))}
+          </ol>
+        </div>
+        <Logs {...props} />
+      </div>
+    );
+  }
+
+  const localPlayerOrder = playerID
+    ? arrayRotate(
+        [...G.playOrder],
+        G.playOrder.findIndex((x) => x === playerID)
+      )
+    : [...G.playOrder];
+
+  return (
+    <div>
+      <div className={styles['row-container']}>
+        <div className={styles['row-container']}>
+          <div>
+            <div>match: {matchID}</div>
+            <div>selection: {G.selectionName}</div>
+            <div>
+              round: {G.round.current}/{G.round.max}
+            </div>
+            <div>phase: {U.phaseLabel(ctx.phase as C.Phase)}</div>
+            <div>
+              turn: {G.turn.current}/{G.turn.max}
+            </div>
+            <div>
+              special stage: {G.specialIndex + 1}/{G.specials.length}
+            </div>
+            <div>deck size: {G.deck.length}</div>
+
+            {G.turn.turnInfo.playerID !== '' && (
+              <div>
+                Player {G.turn.turnInfo.playerID} requests:{' '}
+                {U.spoonLabel(G.turn.turnInfo.spoonInfo)}
+              </div>
+            )}
+
+            <Logs {...props} />
+          </div>
+
+          <div className={styles['col-container']}>
+            {G.playOrder.map((x) => (
+              <ScoreView key={x} board={props} playerID={x} />
+            ))}
+          </div>
+        </div>
+        <div className={styles['col-container']}>
+          <div>
+            <CardList G={G} loc="discard" />
+          </div>
+
+          <Selection numPlayers={G.playOrder.length} list={G.selection} />
+
+          {localPlayerOrder.map((x) => (
+            <PlayerView key={x} board={props} playerID={x} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SushiGoBoard;

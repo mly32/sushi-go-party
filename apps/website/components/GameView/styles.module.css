@@ -17,13 +17,22 @@
   flex-direction: row;
   width: fit-content;
   height: fit-content;
+  overflow: scroll;
 }
 
-.limited-col-container {
+.col-container {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   width: fit-content;
   height: fit-content;
   overflow: scroll;
-  height: 400px;
+}
+
+.reversed-col-container {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.hidden {
+  visibility: hidden;
 }
