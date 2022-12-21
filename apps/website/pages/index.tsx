@@ -1,9 +1,6 @@
 import Link from 'next/link';
 
 export const Index = () => {
-  console.log('port', process.env.PORT);
-  console.log('server', process.env.NX_SUSHI_GO_SERVER_URL);
-  console.log('debug', process.env.NX_SUSHI_GO_DEBUG);
   return (
     <div>
       <h1>Sushi Go Party</h1>

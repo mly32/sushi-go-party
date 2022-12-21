@@ -9,8 +9,6 @@ const clientOriginRegex = new RegExp(
 );
 const clientUrl = process.env.NX_SUSHI_GO_CLIENT_URL || '';
 
-console.log(process.env);
-
 const server = Server({
   games: [SushiGo],
   origins: [clientUrl, clientOriginRegex],

@@ -37,9 +37,8 @@ const Lobby = () => {
 
   const genSetGroup = (group: C.Group, index: number) => {
     const setGroup: ChangeEventHandler<HTMLSelectElement> = (e) => {
-      const copied = structuredClone(customSelection);
-      copied[group][index] = e.target.value as C.Tile;
-      setCustomSelection(copied);
+      customSelection[group][index] = e.target.value as C.Tile;
+      setCustomSelection(customSelection);
     };
     return setGroup;
   };

@@ -89,7 +89,7 @@ const specialMsg = (G: C.GameState, x: PlayerID, info: C.SpecialInfo) => {
 };
 
 const playerView: Game['playerView'] = ({ G, playerID }) => {
-  const strippedState = structuredClone(G);
+  const strippedState: C.GameState = JSON.parse(JSON.stringify(G));
   strippedState.playOrder.forEach((x) => {
     if (x !== playerID) {
       strippedState.players[x].playInfo = C.emptyPlayInfo;
