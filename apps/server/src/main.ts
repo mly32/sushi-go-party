@@ -7,7 +7,9 @@ const PORT = parseInt(process.env.PORT || process.env.NX_SUSHI_GO_SERVER_PORT);
 const clientOriginRegex = new RegExp(
   process.env.NX_SUSHI_GO_CLIENT_ORIGIN_REGEX || '(?!)'
 );
-const clientUrl = process.env.NX_SUSHI_GO_CLIENT_URL;
+const clientUrl = process.env.NX_SUSHI_GO_CLIENT_URL || '';
+
+console.log(process.env);
 
 const server = Server({
   games: [SushiGo],
