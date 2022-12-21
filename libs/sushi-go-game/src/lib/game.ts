@@ -89,7 +89,7 @@ const specialMsg = (G: C.GameState, x: PlayerID, info: C.SpecialInfo) => {
 };
 
 const playerView: Game['playerView'] = ({ G, playerID }) => {
-  const strippedState: C.GameState = JSON.parse(JSON.stringify(G));
+  const strippedState = structuredClone(G);
   strippedState.playOrder.forEach((x) => {
     if (x !== playerID) {
       strippedState.players[x].playInfo = C.emptyPlayInfo;
@@ -137,7 +137,7 @@ const setup: Game['setup'] = (
   }
 ) => {
   if (validateSetupData(setupData, ctx.numPlayers) !== undefined) {
-    throw new Error(`Invalid setup ${JSON.stringify(setupData)}`);
+    throw new Error('Invalid setup');
   }
 
   let selection = C.selectionToSelectionInfo[setupData.selectionName].selection;

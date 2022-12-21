@@ -4,10 +4,10 @@ import { Server } from 'boardgame.io/server';
 
 const PORT = parseInt(process.env.PORT || process.env.NX_SUSHI_GO_SERVER_PORT);
 
+const clientUrl = process.env.NX_SUSHI_GO_CLIENT_URL || '';
 const clientOriginRegex = new RegExp(
   process.env.NX_SUSHI_GO_CLIENT_ORIGIN_REGEX || '(?!)'
 );
-const clientUrl = process.env.NX_SUSHI_GO_CLIENT_URL || '';
 
 const server = Server({
   games: [SushiGo],
@@ -15,7 +15,7 @@ const server = Server({
 });
 
 server.router.get('/', (async (ctx) => {
-  ctx.body = `Hello World! client: ${clientUrl}`;
+  ctx.body = 'Hello World!';
 }) as Router.Middleware);
 
 server.run(PORT);

@@ -2,6 +2,9 @@
   "name": "sushi-go-party",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0  <19.0.0"
+  },
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
