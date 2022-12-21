@@ -137,7 +137,7 @@ const setup: Game['setup'] = (
   }
 ) => {
   if (validateSetupData(setupData, ctx.numPlayers) !== undefined) {
-    throw new Error(`Invalid setup ${JSON.stringify(setupData)}`);
+    throw new Error('Invalid setup');
   }
 
   let selection = C.selectionToSelectionInfo[setupData.selectionName].selection;
