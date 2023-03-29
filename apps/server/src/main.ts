@@ -15,4 +15,6 @@ router.get('/health', (ctx) => {
   ctx.body = 'Ok';
 });
 
-server.run(parseInt(process.env.PORT || CONFIG.port));
+server.run(parseInt(CONFIG.port)).then(() => {
+  console.log('environment:', CONFIG);
+});
