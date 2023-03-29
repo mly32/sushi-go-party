@@ -317,7 +317,7 @@ interface ViewProps {
 }
 
 const PlayerView = ({ board, playerID: x }: ViewProps) => {
-  const { G, ctx, playerID, matchData } = board;
+  const { G, ctx, playerID } = board;
   const SimpleView = () => (
     <div>
       <CardList

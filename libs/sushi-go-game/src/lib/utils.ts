@@ -49,7 +49,11 @@ export const stateLoc = (G: C.GameState, loc: C.Location, x: C.PlayerID) => {
   return (isDirect(loc) ? G[loc] : G.players[x][loc]) as C.Card[];
 };
 
-const cardBackground = (G: C.GameState, x: C.PlayerID, info: C.IndexCard) => {
+export const cardBackground = (
+  G: C.GameState,
+  x: C.PlayerID,
+  info: C.IndexCard
+) => {
   const flipInfo = G.players[x].flipped.find(
     ({ index }) => index === info.index
   );

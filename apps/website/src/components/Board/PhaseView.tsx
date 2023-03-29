@@ -2,22 +2,17 @@ import {
   Box,
   Button,
   Card,
-  Center,
   Flex,
   Group,
   Loader,
   Modal,
-  Paper,
-  SimpleGrid,
   Stack,
   Text,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { C, U, V } from '@sushi-go-party/sushi-go-game';
-import { IconDotsCircleHorizontal } from '@tabler/icons';
+import { C, U } from '@sushi-go-party/sushi-go-game';
 import Image from 'next/image';
 
-import Tile from '../Image/Tile';
 import CardList from './CardList';
 import { ListAction, Props } from './common';
 import { playerIDColor, useStyles } from './styles';

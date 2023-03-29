@@ -4,7 +4,6 @@ import {
   Grid,
   Group,
   Input,
-  MultiSelectProps,
   NumberInput,
   Radio,
   Title,
@@ -14,8 +13,8 @@ import { useForm } from '@mantine/form';
 import SushiGo, { C, U, V } from '@sushi-go-party/sushi-go-game';
 import { useEffect, useState } from 'react';
 
-import { HoverableMultiSelect } from '../UI/Hoverable';
 import Tile from '../Image/Tile';
+import { HoverableMultiSelect } from '../UI/Hoverable';
 import SelectionNameSelect from './SelectionNameSelect';
 
 const useStyles = createStyles((theme) => {

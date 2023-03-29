@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Box,
-  Card,
   Group,
   Paper,
   ScrollArea,
@@ -19,7 +18,7 @@ import {
 } from '@tabler/icons';
 import { useEffect, useState } from 'react';
 
-import { FOOTER_HEIGHT, HEADER_HEIGHT, MIN_SIZE } from '../Layout';
+import { FOOTER_HEIGHT, HEADER_HEIGHT } from '../Layout';
 import Icon from '../UI/Icon';
 
 const useStyles = createStyles(

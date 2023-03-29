@@ -4,7 +4,6 @@ import {
   Card,
   Flex,
   Group,
-  List,
   Notification,
   Paper,
   ScrollArea,

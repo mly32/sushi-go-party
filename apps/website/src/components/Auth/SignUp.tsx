@@ -1,5 +1,4 @@
-import { Button, ButtonProps, Group, Modal, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Button, ButtonProps, Modal } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 export interface SignUpProps extends ButtonProps {
