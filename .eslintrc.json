@@ -22,10 +22,21 @@
         "import/order": [
           "error",
           {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "unknown",
+              ["parent", "sibling"],
+              "index",
+              "object",
+              "type"
+            ],
             "newlines-between": "always",
             "alphabetize": { "order": "asc" }
           }
-        ]
+        ],
+        "sort-imports": ["error", { "ignoreDeclarationSort": true }]
       }
     },
     {

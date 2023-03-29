@@ -169,17 +169,18 @@ export const validGroupCounts: Record<C.Group, number> = {
   Desserts: 1,
 };
 
-const validSelection = (players: number, selection: readonly C.Tile[]) => {
-  if (
-    players === 2 &&
-    selection.some((tile) => tile === 'Spoon' || tile === 'Edamame')
-  ) {
-    return false;
+export const validTile = (tile: C.Tile, numPlayers: number) => {
+  if (numPlayers === 2) {
+    return !(tile === 'Spoon' || tile === 'Edamame');
   }
-  if (
-    (players === 7 || players === 8) &&
-    selection.some((tile) => tile === 'Menu' || tile === 'SpecialOrder')
-  ) {
+  if (numPlayers === 7 || numPlayers === 8) {
+    return !(tile === 'Menu' || tile === 'SpecialOrder');
+  }
+  return true;
+};
+
+const validSelection = (numPlayers: number, selection: readonly C.Tile[]) => {
+  if (selection.some((tile) => !validTile(tile, numPlayers))) {
     return false;
   }
 
@@ -188,13 +189,10 @@ const validSelection = (players: number, selection: readonly C.Tile[]) => {
     groupCounts[C.tileToGroup[tile]] += 1;
   });
 
-  C.groups.forEach((group) => {
-    if (groupCounts[group] != validGroupCounts[group]) {
-      return false;
-    }
-  });
-
-  return selection.length === new Set(selection).size;
+  return (
+    C.groups.every((group) => groupCounts[group] === validGroupCounts[group]) &&
+    selection.length === new Set(selection).size
+  );
 };
 
 export const validSetup = (setupData: C.SetupData) => {
