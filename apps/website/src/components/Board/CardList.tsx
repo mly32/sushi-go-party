@@ -26,10 +26,6 @@ const CardList = ({
 }: CardListProps) => {
   const indexedList: C.IndexCard[] = U.indexedList(G, loc, x);
 
-  if (loc === 'desserts') {
-    console.log('des', indexedList, G.players[x].fridge);
-  }
-
   const CardInfo = ({ card, index }: C.IndexCard) => {
     const flipInfo =
       loc === 'tray'

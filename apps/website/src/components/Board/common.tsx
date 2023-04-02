@@ -135,14 +135,6 @@ export const ListActionSelect = ({
       action.manyAction([]);
       return;
     }
-    console.log(
-      'value:',
-      value,
-
-      value.map(Number),
-      Number('1'),
-      Number('a')
-    );
     action.manyAction(
       value.map(Number).filter((i) => !isNaN(i) && action.enabled(i))
     );

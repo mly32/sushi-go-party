@@ -6,21 +6,30 @@ import AuthWrapper from '../components/Auth/AuthWrapper';
 import { CreateMatchData, GameType } from '../components/CreateMatch';
 import CreateMatch from '../components/CreateMatch';
 import { useAppSelector } from '../store';
-import { useCreateMatchMutation, useLeaveMatchMutation } from '../store/lobby';
+import {
+  useCreateMatchMutation,
+  useJoinMatchMutation,
+  useLeaveMatchMutation,
+} from '../store/lobby';
 
 const Create = () => {
   const router = useRouter();
+  const playerName = useAppSelector((s) => s.user.playerName);
   const roomData = useAppSelector((s) => s.user.roomData);
   const [createMatch] = useCreateMatchMutation();
+  const [joinMatch] = useJoinMatchMutation();
   const [leaveMatch] = useLeaveMatchMutation();
 
   const handleSubmit = async ({ setupData, gameType }: CreateMatchData) => {
     try {
+      if (!playerName) {
+        throw 'player name missing';
+      }
       if (roomData) {
         try {
           await leaveMatch(roomData).unwrap();
         } catch (e) {
-          console.log('leaving failed. non existant');
+          /* leaving failed. non existant */
         }
       }
 
@@ -31,6 +40,10 @@ const Create = () => {
       });
 
       if ('data' in createdMatchID) {
+        const matchID = createdMatchID.data;
+        console.log('match id: ', matchID);
+        await joinMatch({ matchID, playerName });
+
         router.push(`/pre-game/${createdMatchID.data}`);
       } else {
         throw createdMatchID.error;

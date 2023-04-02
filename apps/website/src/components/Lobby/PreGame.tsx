@@ -1,19 +1,26 @@
 import {
   Accordion,
   ActionIcon,
+  Badge,
   Button,
   Code,
   CopyButton,
   Group,
   List,
-  Mark,
+  Loader,
   Paper,
   Text,
   Title,
   Tooltip,
 } from '@mantine/core';
 import { skipToken } from '@reduxjs/toolkit/query/react';
-import { IconCheck, IconCopy, IconEye, IconPlayerPlay } from '@tabler/icons';
+import {
+  IconCheck,
+  IconCopy,
+  IconEye,
+  IconPlayerPlay,
+  IconPlus,
+} from '@tabler/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
@@ -50,7 +57,6 @@ const PreGame = ({ matchID }: PreGameProps) => {
     if (playerName && matchID && roomData?.matchID !== matchID) {
       if (roomData) {
         await leaveMatch(roomData);
-        console.log('left');
       }
       await joinMatch({ matchID, playerName });
     }
@@ -89,22 +95,30 @@ const PreGame = ({ matchID }: PreGameProps) => {
     <List withPadding my="sm">
       {matchMetadata.players?.map((player) => {
         if (!player.name) {
-          return <List.Item key={player.id}>Waiting for player...</List.Item>;
+          return (
+            <List.Item key={player.id}>
+              <Loader size="xs" />
+            </List.Item>
+          );
         }
         const isPlayer =
           roomData &&
           roomData.matchID === matchID &&
           roomData.playerID === player.id.toString();
 
-        if (isPlayer) {
-          return (
-            <List.Item key={player.id}>
-              <Mark color="theme">{player.name}</Mark>
-            </List.Item>
-          );
-        }
-
-        return <List.Item key={player.id}>{player.name}</List.Item>;
+        return (
+          <List.Item key={player.id}>
+            {player.name}
+            {isPlayer && (
+              <>
+                {' '}
+                <Badge variant="outline" size="sm">
+                  You
+                </Badge>
+              </>
+            )}
+          </List.Item>
+        );
       })}
     </List>
   );
@@ -134,6 +148,7 @@ const PreGame = ({ matchID }: PreGameProps) => {
       <Group my="sm" position="apart">
         <Button
           disabled={roomData?.matchID === matchID || done}
+          leftIcon={<IconPlus />}
           onClick={handleJoin}
         >
           Join game

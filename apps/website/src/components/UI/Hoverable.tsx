@@ -126,7 +126,7 @@ export const HoverableMultiSelect = ({
         !selected &&
         item.truelabel?.toLowerCase().includes(value?.toLowerCase().trim())
       }
-      // hack!!!
+      /* type cast */
       {...({} as { data: [] })}
       {...props}
     />
