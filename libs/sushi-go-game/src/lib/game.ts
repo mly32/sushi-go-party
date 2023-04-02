@@ -1,31 +1,15 @@
-import type {
-  Game as BGGame,
-  PlayerID,
-  PhaseConfig as BGPhaseConfig,
-  StageConfig as BGStageConfig,
-  FnContext,
-} from 'boardgame.io';
 import { ActivePlayers, INVALID_MOVE, Stage } from 'boardgame.io/core';
 
+import { CONFIG } from './config';
 import * as C from './constants';
 import * as M from './move';
 import * as S from './score';
 import * as U from './utils';
 import * as V from './valid';
 
-type PluginAPIs = Record<string, never>;
-type Game = BGGame<C.GameState, PluginAPIs, C.SetupData>;
-
-type PhaseConfig = Omit<BGPhaseConfig<C.GameState, PluginAPIs>, 'next'> & {
-  next?:
-    | ((context: FnContext<C.GameState, PluginAPIs>) => C.Phase | void)
-    | C.Phase;
-};
-type StageConfig = BGStageConfig<C.GameState, PluginAPIs>;
-
 const moveMsg = (
   G: C.GameState,
-  x: PlayerID,
+  x: C.PlayerID,
   { handIndex, copyIndex, bonusIndex }: C.PlayInfo,
   isMenu = false
 ) => {
@@ -44,7 +28,7 @@ const moveMsg = (
   return msg;
 };
 
-const specialMsg = (G: C.GameState, x: PlayerID, info: C.SpecialInfo) => {
+const specialMsg = (G: C.GameState, x: C.PlayerID, info: C.SpecialInfo) => {
   const { handIndex, copyIndex, menuHandIndex, spoonInfo } = info;
   const special = G.specials[G.specialIndex];
   const specialcardLabel = U.cardLabel(special.card);
@@ -88,7 +72,7 @@ const specialMsg = (G: C.GameState, x: PlayerID, info: C.SpecialInfo) => {
   return msg;
 };
 
-const playerView: Game['playerView'] = ({ G, playerID }) => {
+const playerView: C.Game['playerView'] = ({ G, playerID }) => {
   const strippedState = structuredClone(G);
   strippedState.playOrder.forEach((x) => {
     if (x !== playerID) {
@@ -116,11 +100,11 @@ const debugSelection: readonly C.Tile[] = [
   'GreenTeaIceCream',
 ];
 
-const validateSetupData: Game['validateSetupData'] = (
+export const validateSetupData: C.Game['validateSetupData'] = (
   setupData,
   numPlayers
 ) => {
-  if (!setupData || process.env.NX_SUSHI_GO_DEBUG === 'true') {
+  if (!setupData || CONFIG.debug) {
     return;
   }
   if (numPlayers !== setupData.numPlayers || !V.validSetup(setupData)) {
@@ -128,7 +112,7 @@ const validateSetupData: Game['validateSetupData'] = (
   }
 };
 
-const setup: Game['setup'] = (
+const setup: C.Game['setup'] = (
   { ctx },
   setupData = {
     selectionName: 'My First Meal',
@@ -144,9 +128,10 @@ const setup: Game['setup'] = (
 
   if (setupData.selectionName === 'Custom') {
     selection = setupData.customSelection;
-  }
-  if (process.env.NX_SUSHI_GO_DEBUG === 'true') {
-    selection = debugSelection;
+
+    if (CONFIG.debug) {
+      selection = debugSelection;
+    }
   }
 
   const players = Object.fromEntries(
@@ -172,10 +157,7 @@ const setup: Game['setup'] = (
     .map((card) => Array(C.cardToInfo[card].copies).fill(card))
     .flat();
 
-  const maxTurns =
-    process.env.NX_SUSHI_GO_DEBUG === 'true'
-      ? 4
-      : C.cardAmounts[ctx.numPlayers];
+  const maxTurns = CONFIG.debug ? 4 : C.cardAmounts[ctx.numPlayers];
 
   const G: C.GameState = {
     selectionName: setupData.selectionName,
@@ -194,7 +176,7 @@ const setup: Game['setup'] = (
   return G;
 };
 
-const endIf: Game['endIf'] = ({ G }) => {
+const endIf: C.Game['endIf'] = ({ G }) => {
   if (G.round.current > G.round.max) {
     const finalScore = G.playOrder.map((x) => S.playerScore(G, x));
     finalScore.sort((a, b) =>
@@ -204,7 +186,7 @@ const endIf: Game['endIf'] = ({ G }) => {
   }
 };
 
-const setupPhase: PhaseConfig = {
+const setupPhase: C.PhaseConfig = {
   start: true,
   next: 'playPhase',
   endIf: () => true,
@@ -212,9 +194,11 @@ const setupPhase: PhaseConfig = {
     G.round.roundInfo = C.emptyRoundInfo;
     G.round.current += 1;
     G.turn.current = 0;
+    G.specialIndex = C.NO_INDEX;
+    G.specials = [];
 
     if (G.round.current > G.round.max) {
-      G.log.push({ msg: 'end of game' });
+      G.log.push({ msg: 'game end' });
       return;
     }
 
@@ -235,7 +219,7 @@ const setupPhase: PhaseConfig = {
   },
 };
 
-const playPhase: PhaseConfig = {
+const playPhase: C.PhaseConfig = {
   next: ({ G }) => (G.specials.length === 0 ? 'rotatePhase' : 'actionPhase'),
   endIf: ({ G }) => G.playOrder.every((x) => G.players[x].confirmed),
   onBegin: ({ G }) => {
@@ -269,7 +253,7 @@ const playPhase: PhaseConfig = {
       client: true,
       redact: true,
       move: ({ G, playerID: x }, info: C.PlayInfo) => {
-        if (!V.validPlayMove(G, x, info)) {
+        if (!info || !V.validPlayMove(G, x, info)) {
           return INVALID_MOVE;
         }
         G.players[x].playInfo = info;
@@ -280,7 +264,7 @@ const playPhase: PhaseConfig = {
   turn: { activePlayers: ActivePlayers.ALL_ONCE },
 };
 
-const spoonStage: StageConfig = {
+const spoonStage: C.StageConfig = {
   moves: {
     spoonMove: {
       client: false,
@@ -311,7 +295,7 @@ const spoonStage: StageConfig = {
   },
 };
 
-const actionPhase: PhaseConfig = {
+const actionPhase: C.PhaseConfig = {
   next: 'rotatePhase',
   endIf: ({ G }) => G.specials.every((special) => special.confirmed),
   onBegin: ({ G, events }) => {
@@ -326,7 +310,7 @@ const actionPhase: PhaseConfig = {
       client: false,
       redact: true,
       move: ({ G, events, playerID: x, random }, info: C.SpecialInfo) => {
-        if (!V.validSpecialMove(G, x, info)) {
+        if (!info || !V.validSpecialMove(G, x, info)) {
           return INVALID_MOVE;
         }
         const special = G.specials[G.specialIndex];
@@ -428,7 +412,7 @@ const actionPhase: PhaseConfig = {
   },
 };
 
-const rotatePhase: PhaseConfig = {
+const rotatePhase: C.PhaseConfig = {
   next: ({ G }) => (G.turn.current === G.turn.max ? 'scorePhase' : 'playPhase'),
   endIf: () => true,
   onEnd: ({ G }) => {
@@ -446,16 +430,16 @@ const rotatePhase: PhaseConfig = {
 
     G.playOrder.forEach((x) => (G.players[x].confirmed = false));
 
-    G.log.push({ msg: 'rotating hands' });
+    G.log.push({ msg: 'hand cycle' });
   },
 };
 
-const scorePhase: PhaseConfig = {
+const scorePhase: C.PhaseConfig = {
   next: 'setupPhase',
   endIf: ({ G }) => G.playOrder.every((x) => G.players[x].confirmed),
   onBegin: ({ G }) => {
     S.scoreUpdater(G, true);
-    G.log.push({ msg: `round ${G.round.current} scoring` });
+    G.log.push({ msg: `round ${G.round.current} score` });
   },
   onEnd: ({ G }) => {
     M.moveCardIf(G, '', 'discard', '', 'deck', () => true);
@@ -480,7 +464,7 @@ const scorePhase: PhaseConfig = {
   turn: { activePlayers: ActivePlayers.ALL_ONCE },
 };
 
-export const SushiGo: Game = {
+export const SushiGo: C.Game = {
   name: 'sushi-go',
   minPlayers: 2,
   maxPlayers: 8,
@@ -495,5 +479,5 @@ export const SushiGo: Game = {
     actionPhase,
     rotatePhase,
     scorePhase,
-  } as Record<C.Phase, PhaseConfig>,
+  } as Record<C.Phase, C.PhaseConfig>,
 };

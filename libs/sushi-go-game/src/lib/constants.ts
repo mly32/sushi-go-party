@@ -1,3 +1,10 @@
+import {
+  Game as BGGame,
+  PhaseConfig as BGPhaseConfig,
+  StageConfig as BGStageConfig,
+  FnContext,
+} from 'boardgame.io';
+
 export type PlayerID = string;
 
 const _locations = [
@@ -112,6 +119,7 @@ export type Card = typeof _cards[number];
 export const cards: readonly Card[] = _cards;
 
 const _selections = [
+  'Custom',
   'My First Meal',
   'Sushi Go!',
   'Party Sampler',
@@ -120,7 +128,6 @@ const _selections = [
   'Cutthroat Combo',
   'Big Banquet',
   'Dinner for Two',
-  'Custom',
 ] as const;
 
 export type Selection = typeof _selections[number];
@@ -350,6 +357,14 @@ export type Phase =
   | 'actionPhase'
   | 'rotatePhase'
   | 'scorePhase';
+
+type PluginAPIs = Record<string, never>;
+export type Game = BGGame<GameState, PluginAPIs, SetupData>;
+
+export type PhaseConfig = Omit<BGPhaseConfig<GameState, PluginAPIs>, 'next'> & {
+  next?: ((context: FnContext<GameState, PluginAPIs>) => Phase | void) | Phase;
+};
+export type StageConfig = BGStageConfig<GameState, PluginAPIs>;
 
 export interface SetupData {
   numPlayers: number;

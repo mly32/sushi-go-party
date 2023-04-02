@@ -245,30 +245,10 @@ export const tileToDessertScorer: Record<C.Tile, Scorer> = (() => {
   };
   scorer['Fruit'] = (G) => {
     const scores = [-2, 0, 1, 3, 6, 10];
-    const fruits: C.Card[][] = [
-      ['Fruit_2W', 'Fruit_1W1P', 'Fruit_1W1O'],
-      ['Fruit_2P', 'Fruit_1W1P', 'Fruit_1P1O'],
-      ['Fruit_2O', 'Fruit_1P1O', 'Fruit_1W1O'],
-    ];
-
-    const fruitCounts = (x: C.PlayerID, fruitInfo: C.Card[]) => {
-      return G.players[x].tray
-        .concat(G.players[x].fridge)
-        .map((card) => {
-          if (card === fruitInfo[0]) {
-            return 2;
-          } else if (card === fruitInfo[1] || card === fruitInfo[2]) {
-            return 1;
-          }
-          return 0;
-        })
-        .reduce((acc, v) => acc + v, 0);
-    };
-
     return playerObj(G, (x) => {
-      return fruits.reduce(
-        (acc, fruitInfo) =>
-          acc + scores[Math.min(fruitCounts(x, fruitInfo), 5)],
+      const f = U.fruitTotal(G.players[x].tray.concat(G.players[x].fridge));
+      return [f.w, f.p, f.o].reduce(
+        (acc, tot) => acc + scores[Math.min(tot, 5)],
         0
       );
     });
@@ -322,7 +302,7 @@ export const turnUpdater = (G: C.GameState) => {
           G.log.push({
             msg: `${U.tileLabel(
               'Uramaki'
-            )} threshold reached; players ${players.join(', ')} discarding`,
+            )} threshold reached; player(s) discarding`,
           });
         }
       });
@@ -349,7 +329,7 @@ export const turnUpdater = (G: C.GameState) => {
         G.log.push({
           msg: `${U.tileLabel(
             'MisoSoup'
-          )} threshold reached; players ${players.join(', ')} discarding`,
+          )} threshold reached; player(s) discarding`,
         });
       }
     }

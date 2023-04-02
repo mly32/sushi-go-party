@@ -42,9 +42,7 @@ this project):
 - koa
 - boardgame.io
 
-deploying on Vercel: <https://nx.dev/recipes/other/deploy-nextjs-to-vercel>
-
-nx overview
+Nx overview:
 
 ```shell
 # initialize monorepo
@@ -61,7 +59,7 @@ npm start website
 npm start server
 ```
 
-building
+Building:
 
 ```shell
 npx nx build website --prod
@@ -69,3 +67,8 @@ npx next start dist/apps/website
 npx nx build server --prod
 node dist/apps/server/main.js
 ```
+
+The project is deployed using [Railway](https://railway.app/) and
+[Vercel](https://vercel.com/).
+
+Every PR produces an unique isolated environment to play test.

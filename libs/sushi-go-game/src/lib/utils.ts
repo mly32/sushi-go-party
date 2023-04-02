@@ -1,7 +1,7 @@
 import * as C from './constants';
 
 const cleanName = (string: string) => {
-  if (string === '') {
+  if (!string) {
     return '';
   }
   const cleaned = string.replace(/([A-Z])/g, ' $1');
@@ -18,6 +18,10 @@ export const phaseLabel = (phase: C.Phase) => {
 
 export const locationLabel = (location: C.Location) => {
   return cleanName(location);
+};
+
+export const groupLabel = (group: C.Group) => {
+  return cleanName(group);
 };
 
 export const tileLabel = (tile: C.Tile) => {
@@ -59,9 +63,45 @@ export const cardBackground = (
   return C.cardToInfo[info.card].bg;
 };
 
+export const indexedList = (
+  G: C.GameState,
+  loc: C.Location,
+  x: C.PlayerID
+): C.IndexCard[] =>
+  stateLoc(G, loc, x)
+    .map((card, index) => ({ index, card }))
+    .sort((a, b) => cardBackground(G, x, a) - cardBackground(G, x, b));
+
 export const initializeRecord = <K extends string, T>(
   fields: ReadonlyArray<string>,
   value: T
 ) => {
   return Object.fromEntries(fields.map((k) => [k, value])) as Record<K, T>;
+};
+
+export const fruitTotal = (cards: C.Card[]) => {
+  const fruits = {
+    w: ['Fruit_2W', 'Fruit_1W1P', 'Fruit_1W1O'] as C.Card[],
+    p: ['Fruit_2P', 'Fruit_1W1P', 'Fruit_1P1O'] as C.Card[],
+    o: ['Fruit_2O', 'Fruit_1P1O', 'Fruit_1W1O'] as C.Card[],
+  };
+
+  const fruitCounts = (fruitInfo: C.Card[]) => {
+    return cards
+      .map((card) => {
+        if (card === fruitInfo[0]) {
+          return 2;
+        } else if (card === fruitInfo[1] || card === fruitInfo[2]) {
+          return 1;
+        }
+        return 0;
+      })
+      .reduce((acc, v) => acc + v, 0);
+  };
+
+  return {
+    w: fruitCounts(fruits.w),
+    p: fruitCounts(fruits.p),
+    o: fruitCounts(fruits.o),
+  };
 };
