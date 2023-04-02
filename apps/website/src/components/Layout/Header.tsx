@@ -1,7 +1,6 @@
 import {
   Avatar,
   Burger,
-  Button,
   Container,
   Group,
   Header,

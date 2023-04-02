@@ -1,11 +1,10 @@
-import { Button, Group, Input, SimpleGrid, Title } from '@mantine/core';
-import { C, U, V } from '@sushi-go-party/sushi-go-game';
+import { SimpleGrid } from '@mantine/core';
+import { C, V } from '@sushi-go-party/sushi-go-game';
 import { useState } from 'react';
 
-import Card from '../../Image/Card';
-import { HoverableSelect } from '../../UI/Hoverable';
 import PhaseView from '../PhaseView';
 import {
+  ConfirmTurn,
   ListAction,
   ListActionSelect,
   Props,
@@ -14,7 +13,6 @@ import {
 
 const PlayPhase = (props: Props) => {
   const { G, moves, playerID: x } = props;
-  // const active = ctx.activePlayers && ctx.activePlayers[x] !== undefined;
 
   const confirmed =
     G.players[x].playInfo.handIndex !== C.emptyPlayInfo.handIndex;
@@ -76,12 +74,11 @@ const PlayPhase = (props: Props) => {
 
   return (
     <>
-      <Group position="apart">
-        <Title mb={0}>Play Phase</Title>
-        <Button disabled={confirmed} onClick={handleConfirm}>
-          Confirm
-        </Button>
-      </Group>
+      <ConfirmTurn
+        title="Play Phase"
+        disabled={confirmed}
+        onClick={handleConfirm}
+      />
 
       <SimpleGrid cols={2} w="fit-content" verticalSpacing={0}>
         <ListActionSelect

@@ -58,7 +58,6 @@ const useStyles = createStyles(
       },
       sidebar: {
         ref: getRef('sidebar'),
-        // minHeight: MIN_SIZE,
         height: gameHeight,
         borderRadius: 0,
         borderLeftWidth: BORDER_WIDTH,
@@ -84,17 +83,14 @@ const useStyles = createStyles(
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        // minHeight: MIN_SIZE,
         height: gameHeight,
         minWidth: gameWidth,
       },
       scroll: {
-        // minHeight: MIN_SIZE,
         height: gameHeight,
       },
       scrollbar: {},
       scrollPanel: {
-        // minHeight: MIN_SIZE - TABS_LIST,
         height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT + TABS_LIST}px)`,
       },
     };
@@ -143,9 +139,6 @@ const BoardLayout = ({
       setLeftTab('info');
     }
   }, [alwaysShow, leftTab, right, toggleRight]);
-
-  // TODO cannot transition bc visibility on right takes up space
-  // transition: 'all 250ms ease'
 
   const leftChevron = <Icon icon={IconChevronLeft} size="md" />;
   const rightChevron = <Icon icon={IconChevronRight} size="md" />;

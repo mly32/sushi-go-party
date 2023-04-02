@@ -1,4 +1,4 @@
-import { Box, Text, Title } from '@mantine/core';
+import { Container, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import { CONFIG } from '../../config';
@@ -9,7 +9,7 @@ const Lobby = () => {
   const [matches, setMatches] = useState<MatchData[]>([]);
 
   const { data: allMatches } = useListMatchesQuery(false, {
-    // pollingInterval: CONFIG.lobbyPollingInterval,
+    pollingInterval: CONFIG.lobbyPollingInterval,
   });
 
   useEffect(() => {
@@ -19,10 +19,10 @@ const Lobby = () => {
   }, [allMatches]);
 
   return (
-    <Box>
+    <Container size="lg" p="md" miw="fit-content">
       <Title>Lobby</Title>
       <ListGames matches={matches} highlightOnHover />
-    </Box>
+    </Container>
   );
 };
 

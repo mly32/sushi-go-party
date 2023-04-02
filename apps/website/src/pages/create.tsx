@@ -46,7 +46,6 @@ const Create = () => {
       });
     }
   };
-  // TODO warn if roomData that creating will leave room
 
   return <CreateMatch handleSubmit={handleSubmit} />;
 };

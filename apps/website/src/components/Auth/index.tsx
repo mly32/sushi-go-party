@@ -2,7 +2,7 @@ import { Button, Group, GroupProps, Text } from '@mantine/core';
 
 import { useAppDispatch } from '../../store';
 import { useAppSelector } from '../../store';
-import { setPlayerName } from '../../store/user';
+import { setPlayerName, setRoomData } from '../../store/user';
 import Login from './LogIn';
 import SignUp from './SignUp';
 
@@ -16,23 +16,12 @@ const Auth = ({ hideButtons = false, ...props }: AuthProps) => {
 
   const handleSubmit = (playerName: string) => {
     dispatch(setPlayerName(playerName));
-    /*
-    TODO
-      if (state.roomData) {
-        const params = {
-          ...state.roomData,
-          newName: valves.playerName
-        }
-        const [updatePlayer] = useUpdatePlayerMutation();
-        updatePlayer(params);
-      }
-      */
     close();
   };
 
   const handleLogout = () => {
     dispatch(setPlayerName(''));
-    // TODO
+    dispatch(setRoomData(null));
   };
 
   const Name = () => (

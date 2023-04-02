@@ -1,7 +1,7 @@
-import { Button, Group, List, Text, Title, Tooltip } from '@mantine/core';
+import { List, Text, Tooltip } from '@mantine/core';
 
 import PhaseView from '../PhaseView';
-import { Props } from '../common';
+import { ConfirmTurn, Props } from '../common';
 import { playerIDColor } from '../styles';
 
 const ScorePhase = (props: Props) => {
@@ -33,13 +33,12 @@ const ScorePhase = (props: Props) => {
 
   return (
     <>
-      <Group position="apart">
-        <Title mb={0}>Score Phase</Title>
-        <Button disabled={!active} onClick={handleConfirm}>
-          Confirm
-        </Button>
-      </Group>
-      <List withPadding type="ordered" mt="md">
+      <ConfirmTurn
+        title="Score Phase"
+        disabled={!active}
+        onClick={handleConfirm}
+      />
+      <List withPadding type="ordered">
         {scores}
       </List>
       <PhaseView hideHand {...props} />

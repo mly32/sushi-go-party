@@ -1,7 +1,6 @@
 import {
   Accordion,
   ActionIcon,
-  Anchor,
   Button,
   Code,
   CopyButton,
@@ -12,7 +11,6 @@ import {
   Text,
   Title,
   Tooltip,
-  createStyles,
 } from '@mantine/core';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import { IconCheck, IconCopy, IconEye, IconPlayerPlay } from '@tabler/icons';
@@ -31,22 +29,12 @@ import CreateMatch, { CreateMatchData, GameType } from '../CreateMatch';
 import Icon from '../UI/Icon';
 import Loading from '../UI/Loading';
 
-const useStyles = createStyles((theme) => ({
-  root: {
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-  },
-}));
-
 export interface PreGameProps {
   matchID: string;
 }
 
 const PreGame = ({ matchID }: PreGameProps) => {
-  const { classes } = useStyles();
-  // TODO join game as client spectator instead?
   const [done, setDone] = useState(false);
-  const router = useRouter();
   const playerName = useAppSelector((s) => s.user.playerName);
   const roomData = useAppSelector((s) => s.user.roomData);
   const { asPath } = useRouter();
@@ -58,7 +46,6 @@ const PreGame = ({ matchID }: PreGameProps) => {
       ? window.location.origin + asPath
       : asPath;
 
-  // TODO button to join (also leave other room when joining this one)
   const handleJoin = async () => {
     if (playerName && matchID && roomData?.matchID !== matchID) {
       if (roomData) {
@@ -69,7 +56,7 @@ const PreGame = ({ matchID }: PreGameProps) => {
     }
   };
 
-  // poll for match data to see if more players have joined
+  /* poll for match data to see if more players have joined */
   const { data: matchMetadata } = useGetMatchQuery(matchID ?? skipToken, {
     pollingInterval: done ? 0 : CONFIG.joinPollingInterval,
   });
@@ -91,7 +78,6 @@ const PreGame = ({ matchID }: PreGameProps) => {
     return <Loading />;
   }
 
-  // TODO leave
   const sameRoom = roomData?.matchID === matchID;
 
   const matchData: CreateMatchData = {

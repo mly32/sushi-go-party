@@ -23,16 +23,16 @@ const useStyles = createStyles((theme) => {
       marginTop: 0,
       marginBottom: `calc(${theme.spacing.xs}px / 2)`,
     },
-
     tileWrapper: {
       paddingTop: 0,
       paddingBottom: 0,
     },
-
     tileGroupLabel: {
       fontSize: theme.fn.size({ size: 'md', sizes: theme.fontSizes }),
       fontWeight: 'bold',
-      // fontSize: theme.fn.size({ size: 'sm', sizes: theme.fontSizes }) - 2,
+    },
+    selectLabel: {
+      fontSize: theme.fn.size({ size: 'sm', sizes: theme.fontSizes }) - 2,
     },
     tile: {
       borderRadius: theme.fn.radius('sm'),
@@ -170,8 +170,6 @@ const CreateMatch = ({
     callback({ setupData, gameType });
   };
 
-  // TODO input names
-
   const tiles = (
     <Input.Wrapper
       label="Tiles"
@@ -184,9 +182,9 @@ const CreateMatch = ({
           .filter((group) => V.validGroupCounts[group] > 0)
           .map((group) => {
             const selectReadOnly = form.values.selectionName !== 'Custom';
-            const description = selectReadOnly
-              ? ''
-              : `pick ${V.validGroupCounts[group]}`;
+            const selectLabel = `${U.groupLabel(group)}${
+              selectReadOnly ? '' : ` (pick ${V.validGroupCounts[group]})`
+            }`;
 
             const numPlayers = form.values.numPlayers;
 
@@ -215,8 +213,8 @@ const CreateMatch = ({
                 className={classes.tileWrapper}
               >
                 <HoverableMultiSelect
-                  label={U.groupLabel(group)}
-                  description={description}
+                  label={selectLabel}
+                  classNames={{ label: classes.selectLabel }}
                   clearable
                   maxSelectedValues={V.validGroupCounts[group]}
                   readOnly={selectReadOnly}

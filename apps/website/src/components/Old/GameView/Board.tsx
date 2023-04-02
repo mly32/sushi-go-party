@@ -355,7 +355,7 @@ const PlayerView = ({ board, playerID: x }: ViewProps) => {
     <div>
       {x === playerID ? <PlayerInfo /> : <SimpleView />}
 
-      {/* <CardList G={G} loc="fridge" x={x} /> */}
+      <CardList G={G} loc="fridge" x={x} />
     </div>
   );
 };

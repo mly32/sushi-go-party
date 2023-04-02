@@ -60,23 +60,3 @@ export type AppDispatch = AppStore['dispatch'];
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
-
-/*
-TODO
-generate list of avatars (can set in metadata for user in server)
-
-lobby:
-  refresh
-  enter (signin)
-  exit (signout)
-
-pre-game:
-  create
-  join
-  leave
-  start (cannot start until all players joined)
-
-during-game???
-exit
-
-*/

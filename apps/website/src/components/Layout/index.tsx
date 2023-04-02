@@ -90,7 +90,7 @@ export function Layout({ children, show = Show.Contained }: LayoutProps) {
           padding={0}
         >
           {show === Show.Contained ? (
-            <Container size="lg" p="md" miw="fit-content">
+            <Container size="lg" p="md">
               {children}
             </Container>
           ) : (

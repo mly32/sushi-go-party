@@ -253,7 +253,7 @@ const playPhase: C.PhaseConfig = {
       client: true,
       redact: true,
       move: ({ G, playerID: x }, info: C.PlayInfo) => {
-        if (!V.validPlayMove(G, x, info)) {
+        if (!info || !V.validPlayMove(G, x, info)) {
           return INVALID_MOVE;
         }
         G.players[x].playInfo = info;
@@ -310,7 +310,7 @@ const actionPhase: C.PhaseConfig = {
       client: false,
       redact: true,
       move: ({ G, events, playerID: x, random }, info: C.SpecialInfo) => {
-        if (!V.validSpecialMove(G, x, info)) {
+        if (!info || !V.validSpecialMove(G, x, info)) {
           return INVALID_MOVE;
         }
         const special = G.specials[G.specialIndex];

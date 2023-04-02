@@ -155,7 +155,6 @@ const CardCheckbox = ({
     copied ? ' (copied)' : ''
   }`;
 
-  // TODO tooltip off without box around if disabled
   return (
     <Tooltip label={label} position="bottom" withinPortal>
       <Box>

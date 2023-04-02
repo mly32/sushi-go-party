@@ -1,14 +1,18 @@
 import {
   Box,
+  Button,
+  ButtonProps,
   DefaultMantineColor,
   Group,
   Input,
   InputWrapperBaseProps,
+  Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { C, U } from '@sushi-go-party/sushi-go-game';
-import { IconX } from '@tabler/icons';
+import { IconCheck, IconX } from '@tabler/icons';
 import { BoardProps } from 'boardgame.io/react';
+import { MouseEventHandler } from 'react';
 
 import Card from '../Image/Card';
 import { HoverableMultiSelect, HoverableSelect } from '../UI/Hoverable';
@@ -21,6 +25,22 @@ export const showInvalidMove = () =>
     color: 'red',
     message: 'Invalid move',
   });
+
+export interface ConfirmTurnProps extends ButtonProps {
+  title: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+export const ConfirmTurn = ({ title, ...props }: ConfirmTurnProps) => {
+  return (
+    <Group mb="sm">
+      <Title mb={0}>{title}</Title>
+      <Button variant="outline" leftIcon={<IconCheck />} {...props}>
+        Confirm
+      </Button>
+    </Group>
+  );
+};
 
 export interface ListAction {
   color?: DefaultMantineColor;

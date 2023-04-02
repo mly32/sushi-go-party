@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Group,
   Input,
   Radio,
@@ -16,6 +15,7 @@ import Tile from '../../Image/Tile';
 import { HoverableSelect } from '../../UI/Hoverable';
 import PhaseView from '../PhaseView';
 import {
+  ConfirmTurn,
   ListAction,
   ListActionSelect,
   Props,
@@ -203,10 +203,10 @@ const ActionPhase = (props: Props) => {
 
   return (
     <>
-      <Group position="apart">
-        <Title mb={0}>Action Phase ({U.tileLabel(specialTile)} Action)</Title>
-        <Button onClick={handleConfirm}>Confirm</Button>
-      </Group>
+      <ConfirmTurn
+        title={`Action Phase ({U.tileLabel(specialTile)} Action)`}
+        onClick={handleConfirm}
+      />
 
       {specialTile === 'TakeoutBox' && (
         <Text>

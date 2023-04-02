@@ -9,7 +9,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "lint": "nx run-many --all --target=lint",
+    "lint": "nx run-many --all --target=lint --max-warnings=0",
     "format-check": "nx format:check"
   },
   "private": true,

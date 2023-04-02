@@ -17,14 +17,14 @@ const About = () => {
       <Divider />
 
       <Text fs="italic">
-        Pass sushi around a bigger table and take the best dishes. Save room for
+        Pass sushi around the table and take the best dishes. Save room for
         dessert!
       </Text>
 
       <Text>
         Read the game{' '}
         <Link
-          href="/assets/Rules.pdf"
+          href="/assets/rules.pdf"
           target="_blank"
           rel="noopener noreferrer"
           passHref

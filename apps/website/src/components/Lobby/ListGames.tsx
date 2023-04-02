@@ -1,18 +1,14 @@
 import {
   ActionIcon,
-  Group,
   Paper,
   Table,
   TableProps,
   Text,
-  ThemeIcon,
   Tooltip,
-  UnstyledButton,
   createStyles,
 } from '@mantine/core';
 import { IconCards, IconPlayerPlay, IconPlus } from '@tabler/icons';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { MatchData } from '../../store/lobby';
 
@@ -125,8 +121,6 @@ const ListGames = ({ matches, ...props }: ListGamesProps) => {
       );
     }
   );
-
-  // TODO table with sort and search
 
   return (
     <Paper withBorder>

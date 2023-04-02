@@ -25,7 +25,6 @@ const useStyles = createStyles((theme) => ({
 const LayoutFooter = (props: Omit<FooterProps, 'children'>) => {
   const { classes } = useStyles();
   const year = new Date().getFullYear();
-  // TODO z index
 
   return (
     <Footer {...props}>

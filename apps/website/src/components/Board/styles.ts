@@ -41,10 +41,6 @@ export const useStyles = createStyles((theme) => {
       borderRadius: 0,
       background: 'none',
     },
-    // cardLike: {
-    //   backgroundColor:
-    //     theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-    // },
     dessertIcon: {
       verticalAlign: 'baseline',
       filter: `drop-shadow(0px 0px 1px black)`,

@@ -1,6 +1,6 @@
 import { Carousel, CarouselProps } from '@mantine/carousel';
 import {
-  Button,
+  ActionIcon,
   Checkbox,
   Divider,
   Group,
@@ -8,10 +8,13 @@ import {
   Slider,
   Text,
   Title,
+  Tooltip,
   createStyles,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { C } from '@sushi-go-party/sushi-go-game';
+import { IconMusic } from '@tabler/icons';
+import { useState } from 'react';
 
 import Card from '../components/Image/Card';
 import Tile from '../components/Image/Tile';
@@ -26,6 +29,10 @@ const useStyles = createStyles((theme) => ({
 
 const Settings = () => {
   const { classes } = useStyles();
+
+  const audio = new Audio('/assets/ping_sound.mp3');
+  const [volume, setVolume] = useState(50);
+
   const form = useForm({
     initialValues: {
       checked: [] as ('flipped' | 'copied')[],
@@ -45,6 +52,11 @@ const Settings = () => {
     ],
   };
 
+  const handleSound = () => {
+    audio.volume = volume / 100;
+    audio.play();
+  };
+
   return (
     <>
       <Title>Settings</Title>
@@ -56,10 +68,24 @@ const Settings = () => {
       />
       <Input.Wrapper label="Volume">
         <Group>
-          <Slider w="100%" maw={200} />
-          <Button disabled variant="subtle">
-            Test
-          </Button>
+          <Slider
+            w="100%"
+            maw={200}
+            value={volume}
+            onChange={setVolume}
+            min={0}
+            max={100}
+          />
+          <Tooltip label="Test sound">
+            <ActionIcon
+              onClick={handleSound}
+              variant="transparent"
+              color="dark"
+              disabled={volume === 0}
+            >
+              <IconMusic />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Input.Wrapper>
       <Text>... more to come</Text>
@@ -68,8 +94,6 @@ const Settings = () => {
         For now, view some art &#128522;
         {/* smile emoji */}
       </Text>
-
-      {/* <Card card={'Chopsticks_1'} copied={true} /> */}
 
       <Text align="center" fz="lg">
         Tiles

@@ -2,9 +2,7 @@ import {
   Accordion,
   Box,
   Card,
-  Flex,
   Group,
-  Notification,
   Paper,
   ScrollArea,
   Space,
@@ -12,12 +10,13 @@ import {
   Title,
 } from '@mantine/core';
 import { C, U } from '@sushi-go-party/sushi-go-game';
-import { IconInfoCircle, IconToolsKitchen2, IconTrash } from '@tabler/icons';
+import { IconToolsKitchen2, IconTrash } from '@tabler/icons';
 
 import Tile from '../Image/Tile';
 import Icon from '../UI/Icon';
 import BoardLayout from './BoardLayout';
 import CardCheckbox from './CardCheckbox';
+import Logs from './Logs';
 import MatchInfo from './MatchInfo';
 import NotStarted from './NotStarted';
 import PhaseView from './PhaseView';
@@ -29,48 +28,13 @@ import {
   SpoonStage,
 } from './Views';
 import { Props } from './common';
-import { playerIDColor, useStyles } from './styles';
+import { useStyles } from './styles';
 
 const Chat = (props: Props) => {
   return (
     <Card p="xs" bg="none">
       <Text>... to be added</Text>
     </Card>
-  );
-};
-
-const Logs = ({ G, matchData }: Props) => {
-  const { classes, theme } = useStyles();
-  const gameColor = theme.colorScheme === 'dark' ? 'bright' : 'dark';
-
-  return (
-    <Flex direction="column-reverse">
-      {G.log
-        .slice()
-        .reverse()
-        .map(({ playerID, msg }, index) => (
-          <Notification
-            key={index}
-            disallowClose
-            color={playerIDColor[playerID] ?? gameColor}
-            className={classes.notification}
-          >
-            {playerID ? (
-              <Text span c={playerIDColor[playerID]} fw="bold">
-                {matchData[playerID].name ?? playerID}
-              </Text>
-            ) : (
-              <IconInfoCircle
-                style={{
-                  verticalAlign: 'bottom',
-                }}
-                size={theme.fontSizes.lg}
-              />
-            )}{' '}
-            {msg}
-          </Notification>
-        ))}
-    </Flex>
   );
 };
 
@@ -145,50 +109,39 @@ const CommonView = (props: Props) => {
   );
 };
 
-const Body = (props: Props) => {
-  const { G, ctx, playerID: x } = props;
-  const BOARD_WIDTH = Math.max(800, 1200 - 100 * Math.max(0, 10 - G.turn.max));
+const InnerView = (props: Props) => {
+  const { ctx, playerID: x } = props;
   const spectate = x === null;
 
-  const View = () => {
-    if (ctx.gameover !== undefined) {
-      return <GameOver {...props} />;
-    }
-    if (spectate) {
-      return <Spectate {...props} />;
-    }
-    switch (ctx.phase as C.Phase) {
-      case 'playPhase':
-        return <PlayPhase {...props} />;
-      case 'actionPhase':
-        if (ctx.activePlayers && ctx.activePlayers[x] === 'spoonStage') {
-          return <SpoonStage {...props} />;
-        }
-        return <ActionPhase {...props} />;
-      case 'scorePhase':
-        return <ScorePhase {...props} />;
-      default:
-        return <CommonView {...props} />;
-    }
-  };
+  if (ctx.gameover !== undefined) {
+    return <GameOver {...props} />;
+  }
+  if (spectate) {
+    return <Spectate {...props} />;
+  }
 
-  return (
-    <Box w={BOARD_WIDTH}>
-      <TopInfo {...props} />
-      <Space h="md" />
-
-      <View key={G.turn.current} />
-    </Box>
-  );
+  switch (ctx.phase as C.Phase) {
+    case 'playPhase':
+      return <PlayPhase {...props} />;
+    case 'actionPhase':
+      if (ctx.activePlayers && ctx.activePlayers[x] === 'spoonStage') {
+        return <SpoonStage {...props} />;
+      }
+      return <ActionPhase {...props} />;
+    case 'scorePhase':
+      return <ScorePhase {...props} />;
+    default:
+      return <CommonView {...props} />;
+  }
 };
 
 export type SushiGoBoardProps = Props;
 
 const SushiGoBoard = (props: Props) => {
-  const { ctx, matchData } = props;
-
+  const { G, ctx, matchData } = props;
   const joinedPlayers =
     matchData.filter((p) => p.name !== undefined).length || 0;
+  const boardWidth = Math.max(800, 1200 - 100 * Math.max(0, 10 - G.turn.max));
 
   if (joinedPlayers !== ctx.numPlayers) {
     return <NotStarted {...props} />;
@@ -200,7 +153,11 @@ const SushiGoBoard = (props: Props) => {
       chat={<Chat {...props} />}
       log={<Logs {...props} />}
     >
-      <Body {...props} />
+      <Box w={boardWidth}>
+        <TopInfo {...props} />
+        <Space h="md" />
+        <InnerView key={G.turn.current} {...props} />
+      </Box>
     </BoardLayout>
   );
 };

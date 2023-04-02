@@ -17,7 +17,7 @@ import { SITE_THEME, TITLE } from '../constants';
 import { persistor, store } from '../store';
 
 const showNonePaths: Set<string> = new Set(['/404', '/500']);
-const showFreePaths: Set<string> = new Set(['/game/[matchID]']);
+const showFreePaths: Set<string> = new Set(['/', '/game/[matchID]']);
 
 interface AppProps extends NextAppProps {
   colorScheme: ColorScheme;

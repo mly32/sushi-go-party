@@ -1,9 +1,10 @@
-import { Box, Button, Group, Text, Title } from '@mantine/core';
+import { Box, Text } from '@mantine/core';
 import { C, U, V } from '@sushi-go-party/sushi-go-game';
 import { useState } from 'react';
 
 import PhaseView from '../PhaseView';
 import {
+  ConfirmTurn,
   ListAction,
   ListActionSelect,
   Props,
@@ -44,10 +45,7 @@ const SpoonStage = (props: Props) => {
 
   return (
     <>
-      <Group position="apart">
-        <Title mb={0}>Spoon Stage</Title>
-        <Button onClick={handleConfirm}>Confirm</Button>
-      </Group>
+      <ConfirmTurn title="Spoon Stage" onClick={handleConfirm} />
       <Text>
         <Text span fw="bold" color={playerIDColor[other]}>
           {matchData[other].name ?? other}

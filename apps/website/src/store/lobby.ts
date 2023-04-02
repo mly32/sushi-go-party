@@ -7,8 +7,6 @@ import { CONFIG } from '../config';
 const ServerUrl = CONFIG.serverUrl;
 const GameName = SushiGo.name;
 
-// TODO where for listMatches (isGameover, updatedBefore, updatedAfter)
-
 export type MatchID = string;
 
 export interface MatchData extends Omit<LobbyAPI.Match, 'setupData'> {
@@ -22,7 +20,6 @@ export interface CreateMatchParams {
 }
 
 export interface JoinMatchParams {
-  // TODO playerID?, data?
   matchID: MatchID;
   playerName: string;
 }
@@ -34,7 +31,6 @@ export interface LeaveMatchParams {
 }
 
 export interface UpdatePlayerParams {
-  // TODO data?
   matchID: MatchID;
   playerID: string;
   credentials: string;

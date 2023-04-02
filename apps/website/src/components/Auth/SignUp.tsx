@@ -16,7 +16,7 @@ const SignUp = ({
   return (
     <>
       <Modal opened={opened} onClose={close} title="Sign Up">
-        Hi
+        ... to come
       </Modal>
 
       <Button onClick={open} {...props}>
