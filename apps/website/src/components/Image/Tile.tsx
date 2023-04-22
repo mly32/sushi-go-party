@@ -1,6 +1,17 @@
-import { Box, Tooltip } from '@mantine/core';
+import {
+  Box,
+  Group,
+  Modal,
+  Text,
+  Tooltip,
+  UnstyledButton,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { C, U } from '@sushi-go-party/sushi-go-game';
 import { SVGProps } from 'react';
+
+import { TILE_POSITION } from '../../constants';
+import CardCheckbox from '../Board/CardCheckbox';
 
 const TILE_SIZE_INFO = [
   [2055, 5],
@@ -15,7 +26,7 @@ interface TileImageProps extends SVGProps<SVGImageElement> {
 }
 
 const TileImage = ({ tile, numPlayers, ...props }: TileImageProps) => {
-  const pos = C.tilePosition[tile](numPlayers);
+  const pos = TILE_POSITION[tile](numPlayers);
 
   return (
     <image
@@ -32,25 +43,62 @@ const TileImage = ({ tile, numPlayers, ...props }: TileImageProps) => {
 export interface TileProps extends SVGProps<SVGSVGElement> {
   tile: C.Tile;
   tooltip?: boolean;
+  showModal?: boolean;
   numPlayers: number;
 }
 
-const Tile = ({ tile, numPlayers, tooltip = false, ...props }: TileProps) => {
+const Tile = ({
+  tile,
+  numPlayers,
+  tooltip = false,
+  showModal = false,
+  ...props
+}: TileProps) => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const content = (
+    <Box>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none"
+        viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
+        display="block"
+        pointerEvents="none"
+        {...props}
+      >
+        <title>{U.tileLabel(tile)}</title>
+        <TileImage tile={tile} numPlayers={numPlayers} />
+      </svg>
+    </Box>
+  );
+
+  if (!showModal) {
+    return (
+      <Tooltip label={U.tileLabel(tile)} withinPortal disabled={!tooltip}>
+        {content}
+      </Tooltip>
+    );
+  }
+
   return (
     <Tooltip label={U.tileLabel(tile)} withinPortal disabled={!tooltip}>
-      <Box>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-          viewBox={`0 0 ${TILE_WIDTH} ${TILE_HEIGHT}`}
-          display="block"
-          pointerEvents="none"
-          {...props}
+      <UnstyledButton onClick={open}>
+        <Modal
+          size="xl"
+          opened={opened}
+          onClose={close}
+          title={<Text>{U.tileLabel(tile)}</Text>}
         >
-          <title>{U.tileLabel(tile)}</title>
-          <TileImage tile={tile} numPlayers={numPlayers} />
-        </svg>
-      </Box>
+          <Group spacing={2} py={4} px="sm" position="center">
+            {Array.from(C.tileToCards[tile])
+              .map((card) => Array(C.cardToInfo[card].copies).fill(card))
+              .flat()
+              .map((card, index) => (
+                <CardCheckbox key={index} card={card} disabled />
+              ))}
+          </Group>
+        </Modal>
+        {content}
+      </UnstyledButton>
     </Tooltip>
   );
 };

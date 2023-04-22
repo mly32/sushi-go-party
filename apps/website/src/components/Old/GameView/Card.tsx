@@ -1,6 +1,7 @@
 import { C, U } from '@sushi-go-party/sushi-go-game';
 import { CSSProperties } from 'react';
 
+import { CARD_POSITION } from '../../../constants';
 import styles from './styles.module.css';
 
 export interface ListAction {
@@ -29,7 +30,7 @@ export interface CardProps {
 }
 
 const Card = ({ card, index, actions }: CardProps) => {
-  const position = C.cardPosition[card];
+  const position = CARD_POSITION[card];
   const info: CSSProperties = {
     backgroundSize: `${CARD_SIZE_INFO[1][1] * 100}%`,
     backgroundPositionY: -position[0] * CARD_HEIGHT,

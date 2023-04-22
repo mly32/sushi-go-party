@@ -336,10 +336,14 @@ export const turnUpdater = (G: C.GameState) => {
   });
 };
 
-export const playerScore = (G: C.GameState, x: C.PlayerID): C.PlayerScore => {
-  return {
+export const playerScores = (G: C.GameState): C.PlayerScore[] => {
+  const dessertScores = tileToDessertScorer[G.dessert](G);
+
+  return G.playOrder.map((x) => ({
     playerID: x,
     score: G.players[x].score,
     desserts: G.players[x].fridge.length,
-  };
+    roundScores: G.players[x].roundScores,
+    dessertScore: dessertScores[x],
+  }));
 };

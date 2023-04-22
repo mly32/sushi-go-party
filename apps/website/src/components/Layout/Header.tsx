@@ -42,7 +42,11 @@ export interface LayoutHeaderProps extends Omit<HeaderProps, 'children'> {
   toggleOpened: () => void;
 }
 
-function LayoutHeader({ opened, toggleOpened, ...props }: LayoutHeaderProps) {
+const LayoutHeader = ({
+  opened,
+  toggleOpened,
+  ...props
+}: LayoutHeaderProps) => {
   const { classes, theme } = useStyles();
 
   return (
@@ -86,6 +90,6 @@ function LayoutHeader({ opened, toggleOpened, ...props }: LayoutHeaderProps) {
       </Container>
     </Header>
   );
-}
+};
 
 export default LayoutHeader;

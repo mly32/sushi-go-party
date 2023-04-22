@@ -183,7 +183,9 @@ const CreateMatch = ({
           .map((group) => {
             const selectReadOnly = form.values.selectionName !== 'Custom';
             const selectLabel = `${U.groupLabel(group)}${
-              selectReadOnly ? '' : ` (pick ${V.validGroupCounts[group]})`
+              selectReadOnly || group === 'Nigiri'
+                ? ''
+                : ` (pick ${V.validGroupCounts[group]})`
             }`;
 
             const numPlayers = form.values.numPlayers;
@@ -217,7 +219,7 @@ const CreateMatch = ({
                   classNames={{ label: classes.selectLabel }}
                   clearable
                   maxSelectedValues={V.validGroupCounts[group]}
-                  readOnly={selectReadOnly}
+                  readOnly={selectReadOnly || group === 'Nigiri'}
                   overData={groupTiles}
                   {...form.getInputProps(`selection.${group}`)}
                 />
@@ -277,6 +279,8 @@ const CreateMatch = ({
         {toSelectionList(form.values.selection).map((tile) => (
           <Tile
             key={tile}
+            tooltip
+            showModal
             tile={tile}
             numPlayers={form.values.numPlayers}
             width={110}

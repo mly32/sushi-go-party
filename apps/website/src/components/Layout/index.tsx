@@ -51,7 +51,7 @@ export interface LayoutProps {
   show?: Show;
 }
 
-export function Layout({ children, show = Show.Contained }: LayoutProps) {
+export const Layout = ({ children, show = Show.Contained }: LayoutProps) => {
   const router = useRouter();
   const { classes } = useStyles({ show });
   const [opened, setOpened] = useState(false);
@@ -100,4 +100,4 @@ export function Layout({ children, show = Show.Contained }: LayoutProps) {
       </ScrollArea>
     </NotificationsProvider>
   );
-}
+};

@@ -33,7 +33,7 @@ export const useStyles = createStyles((theme) => {
       backgroundImage: `${darken}url(/assets/fridge/fridge_closed.png)`,
       backgroundSize: '100% 100%',
       width: 110,
-      height: 165,
+      height: 160,
     },
     notification: {
       boxShadow: 'none',

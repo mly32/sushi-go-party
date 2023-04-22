@@ -41,7 +41,6 @@ const Create = () => {
 
       if ('data' in createdMatchID) {
         const matchID = createdMatchID.data;
-        console.log('match id: ', matchID);
         await joinMatch({ matchID, playerName });
 
         router.push(`/pre-game/${createdMatchID.data}`);

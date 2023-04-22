@@ -204,7 +204,7 @@ const ActionPhase = (props: Props) => {
   return (
     <>
       <ConfirmTurn
-        title={`Action Phase ({U.tileLabel(specialTile)} Action)`}
+        title={`Action Phase (${U.tileLabel(specialTile)} Action)`}
         onClick={handleConfirm}
       />
 

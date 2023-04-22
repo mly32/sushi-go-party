@@ -53,7 +53,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function ServerErrorPage() {
+const ServerErrorPage = () => {
   const router = useRouter();
   const { classes } = useStyles();
 
@@ -79,6 +79,6 @@ export function ServerErrorPage() {
       </Container>
     </div>
   );
-}
+};
 
 export default ServerErrorPage;
