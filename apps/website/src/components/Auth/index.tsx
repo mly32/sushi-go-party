@@ -16,7 +16,6 @@ const Auth = ({ hideButtons = false, ...props }: AuthProps) => {
 
   const handleSubmit = (playerName: string) => {
     dispatch(setPlayerName(playerName));
-    close();
   };
 
   const handleLogout = () => {

@@ -239,6 +239,9 @@ const CreateMatch = ({
 
   const readOnly = matchData !== null;
 
+  const numberLabel =
+    'Number of players ' + `(${SushiGo.minPlayers}-${SushiGo.maxPlayers})`;
+
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       {title && (
@@ -272,7 +275,7 @@ const CreateMatch = ({
         </Grid.Col>
         <Grid.Col xs={6} md={3}>
           <NumberInput
-            label="Number of players"
+            label={numberLabel}
             min={SushiGo.minPlayers}
             max={SushiGo.maxPlayers}
             {...form.getInputProps('numPlayers')}
