@@ -86,14 +86,6 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'About',
     link: '/about',
   },
-  {
-    kind: 'many',
-    label: 'Old',
-    links: [
-      { label: 'Local', link: '/old/local' },
-      { label: 'Online', link: '/old/online' },
-    ],
-  },
 ];
 
 export const GITHUB_LINK = 'https://github.com/mly32/sushi-go-party';

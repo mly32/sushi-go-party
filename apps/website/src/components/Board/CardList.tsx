@@ -51,7 +51,8 @@ const CardList = ({
       if (
         checked &&
         (loc === 'hand' || loc === 'menuHand') &&
-        V.validCopyIndex(G, x, copyIndex, C.cardToTile[card], true)
+        V.validCopyIndex(G, x, copyIndex, C.cardToTile[card], true) &&
+        copyIndex !== C.NO_INDEX
       ) {
         viewCard.card = G.players[x].tray[copyIndex];
         viewCard.copied = true;

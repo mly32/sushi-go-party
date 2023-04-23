@@ -66,7 +66,7 @@ export const Layout = ({ children, show = Show.Contained }: LayoutProps) => {
 
   return (
     <NotificationsProvider className={classes.notifications}>
-      <ScrollArea className={classes.bound}>
+      <ScrollArea key={router.pathname} className={classes.bound}>
         <AppShell
           fixed={false}
           hidden={show === Show.None}

@@ -48,7 +48,7 @@ const specialMsg = (G: C.GameState, x: C.PlayerID, info: C.SpecialInfo) => {
     };
     msg += moveMsg(G, x, menuInfo, true) + `; discards ${specialcardLabel}`;
   } else if (C.cardToTile[special.card] === 'Spoon') {
-    msg += `asks for ${U.spoonLabel(spoonInfo)}`;
+    msg += `asks for a ${U.spoonLabel(spoonInfo)} (${spoonInfo.kind})`;
     const tile =
       spoonInfo.kind === 'tile' ? spoonInfo.tile : C.cardToTile[spoonInfo.card];
     if (tile === 'SpecialOrder') {

@@ -108,7 +108,7 @@ export const ListActionSelect = ({
     };
 
     return (
-      <Group position="apart">
+      <Group>
         {wrapperProps && (
           <Input.Wrapper {...wrapperProps}>
             <></>
@@ -141,7 +141,7 @@ export const ListActionSelect = ({
   };
 
   return (
-    <Group position="apart">
+    <Group>
       {wrapperProps && (
         <Input.Wrapper {...wrapperProps}>
           <></>
