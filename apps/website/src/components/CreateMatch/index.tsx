@@ -265,7 +265,7 @@ const CreateMatch = ({
             <Checkbox
               pt="xs"
               label="Pass both ways"
-              {...form.getInputProps('passBothWays')}
+              {...form.getInputProps('passBothWays', { type: 'checkbox' })}
               {...(readOnly ? { onChange: () => {} } : {})}
             />
           </Input.Wrapper>

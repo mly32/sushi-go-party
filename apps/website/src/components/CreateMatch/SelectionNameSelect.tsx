@@ -43,6 +43,7 @@ const SelectionNameSelect = ({
         numPlayers,
         selectionName: s.value,
         customSelection: [],
+        passBothWays: false,
       })
     ),
   });
