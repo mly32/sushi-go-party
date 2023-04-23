@@ -41,7 +41,6 @@ const SpoonStage = (props: Props) => {
   };
 
   const other = G.specials[G.specialIndex].playerID;
-  const name = U.spoonLabel(spoonInfo);
 
   return (
     <>
@@ -50,7 +49,7 @@ const SpoonStage = (props: Props) => {
         <Text span fw="bold" color={playerIDColor[other]}>
           {matchData[other].name ?? other}
         </Text>{' '}
-        asks for a {name} ({spoonInfo.kind})
+        asks for a {U.spoonLabel(spoonInfo)} ({spoonInfo.kind})
       </Text>
       <Box w="fit-content">
         <ListActionSelect

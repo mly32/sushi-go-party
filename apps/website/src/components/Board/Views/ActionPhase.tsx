@@ -1,12 +1,4 @@
-import {
-  Box,
-  Group,
-  Input,
-  Radio,
-  SimpleGrid,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Grid, Group, Input, Radio, Title } from '@mantine/core';
 import { C, U, V } from '@sushi-go-party/sushi-go-game';
 import { useState } from 'react';
 
@@ -187,6 +179,8 @@ const ActionPhase = (props: Props) => {
     },
     action: updateSpecialInfo('copyIndex'),
     selected: specialInfo.copyIndex,
+    color: 'green',
+    hideSelected: true,
   };
 
   const takeoutAction: ListAction = {
@@ -197,10 +191,6 @@ const ActionPhase = (props: Props) => {
     selected: specialInfo.flipList,
   };
 
-  const flipNumber = G.players[x].tray.filter((_, index) =>
-    V.validFlip(G, x, index)
-  ).length;
-
   return (
     <>
       <ConfirmTurn
@@ -208,67 +198,67 @@ const ActionPhase = (props: Props) => {
         onClick={handleConfirm}
       />
 
-      {specialTile === 'TakeoutBox' && (
-        <Text>
-          Flipping {specialInfo.flipList.length}/{flipNumber}
-        </Text>
-      )}
-
-      <SimpleGrid cols={2} w="fit-content" verticalSpacing={0}>
+      <Grid gutter={'xs'}>
         {specialTile === 'Menu' && (
-          <ListActionSelect
-            {...props}
-            wrapperProps={{
-              label: 'Select a card',
-              description: 'from the menu',
-            }}
-            action={menuAction}
-          />
+          <Grid.Col span={6}>
+            <ListActionSelect
+              {...props}
+              wrapperProps={{
+                label: 'Select a card',
+                description: 'from the menu',
+              }}
+              action={menuAction}
+            />
+          </Grid.Col>
         )}
 
         {specialTile === 'Chopsticks' && (
-          <ListActionSelect
-            {...props}
-            wrapperProps={{
-              label: 'Select a card',
-              description: 'from your hand',
-            }}
-            action={chopsticksAction}
-          />
+          <Grid.Col span={6}>
+            <ListActionSelect
+              {...props}
+              wrapperProps={{
+                label: 'Select a card',
+                description: 'from your hand',
+              }}
+              action={chopsticksAction}
+            />
+          </Grid.Col>
         )}
 
         {specialTile === 'Spoon' && (
-          <Box>
+          <Grid.Col span={6}>
             <ItemForm
               G={G}
               item={specialInfo.spoonInfo}
               setItem={setSpoonInfo}
             />
-          </Box>
+          </Grid.Col>
         )}
 
-        <ListActionSelect
-          {...props}
-          wrapperProps={{
-            label: 'Copy a card',
-            description: 'from your tray',
-          }}
-          action={copyAction}
-        />
-      </SimpleGrid>
+        {specialTile === 'TakeoutBox' && (
+          <Grid.Col span={12}>
+            <ListActionSelect
+              {...props}
+              wrapperProps={{
+                label: 'Select cards to flip',
+                description: 'from your tray',
+              }}
+              action={takeoutAction}
+            />
+          </Grid.Col>
+        )}
 
-      {specialTile === 'TakeoutBox' && (
-        <Box w="fit-content">
+        <Grid.Col span={6}>
           <ListActionSelect
             {...props}
             wrapperProps={{
-              label: 'Select cards to flip',
+              label: 'Copy a card',
               description: 'from your tray',
             }}
-            action={takeoutAction}
+            action={copyAction}
           />
-        </Box>
-      )}
+        </Grid.Col>
+      </Grid>
 
       <PhaseView
         {...props}
