@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Divider,
   Grid,
   Group,
@@ -100,19 +101,23 @@ const CreateMatch = ({
           selectionName: matchData.setupData.selectionName,
           selection: fromSelectionList(matchData.setupData.customSelection),
           gameType: matchData.gameType,
+          passBothWays: matchData.setupData.passBothWays,
         }
       : {
           numPlayers: SushiGo.minPlayers,
           selectionName: 'Custom' as C.Selection,
           selection: fromSelectionName('My First Meal'),
           gameType: GameType.Public,
+          passBothWays: false,
         },
     validate: (values) => {
-      const { numPlayers, selectionName, selection, gameType } = values;
+      const { numPlayers, selectionName, selection, passBothWays, gameType } =
+        values;
       const setupData: C.SetupData = {
         numPlayers,
         selectionName,
         customSelection: toSelectionList(selection),
+        passBothWays,
       };
       return {
         numPlayers:
@@ -161,11 +166,13 @@ const CreateMatch = ({
   }, [values.selectionName, setFieldValue]);
 
   const handleSubmit: Parameters<typeof form.onSubmit>[0] = (values) => {
-    const { numPlayers, selectionName, selection, gameType } = values;
+    const { numPlayers, selectionName, selection, passBothWays, gameType } =
+      values;
     const setupData: C.SetupData = {
       numPlayers,
       selectionName,
       customSelection: toSelectionList(selection),
+      passBothWays,
     };
     callback({ setupData, gameType });
   };
@@ -242,7 +249,7 @@ const CreateMatch = ({
       )}
 
       <Grid gutter="xs" gutterXs="md" grow>
-        <Grid.Col xs={12} md={4}>
+        <Grid.Col span={6} md={3}>
           <Radio.Group
             label="Game type"
             {...form.getInputProps('gameType')}
@@ -253,7 +260,17 @@ const CreateMatch = ({
             ))}
           </Radio.Group>
         </Grid.Col>
-        <Grid.Col xs={6} md={4}>
+        <Grid.Col span={6} md={3}>
+          <Input.Wrapper label="Variant">
+            <Checkbox
+              pt="xs"
+              label="Pass both ways"
+              {...form.getInputProps('passBothWays')}
+              {...(readOnly ? { onChange: () => {} } : {})}
+            />
+          </Input.Wrapper>
+        </Grid.Col>
+        <Grid.Col xs={6} md={3}>
           <NumberInput
             label="Number of players"
             min={SushiGo.minPlayers}
@@ -262,7 +279,7 @@ const CreateMatch = ({
             readOnly={readOnly}
           />
         </Grid.Col>
-        <Grid.Col xs={6} md={4}>
+        <Grid.Col xs={6} md={3}>
           <SelectionNameSelect
             label="Menu selection"
             numPlayers={form.values.numPlayers}

@@ -341,6 +341,7 @@ export interface Log {
 export interface GameState {
   selectionName: string;
   selection: readonly Tile[];
+  passBothWays: boolean;
   dessert: Tile;
   playOrder: readonly PlayerID[];
   players: { [key: PlayerID]: PlayerState };
@@ -373,6 +374,7 @@ export interface SetupData {
   numPlayers: number;
   selectionName: Selection;
   customSelection: Tile[];
+  passBothWays: boolean;
 }
 
 export interface PlayerScore {

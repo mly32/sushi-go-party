@@ -1,4 +1,12 @@
-import { Badge, Card, Notification, Text, Title, Tooltip } from '@mantine/core';
+import {
+  Badge,
+  Card,
+  Divider,
+  Notification,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
 import { C, U } from '@sushi-go-party/sushi-go-game';
 
 import { Props } from './common';
@@ -22,7 +30,11 @@ const MatchInfo = ({ G, matchID, ctx, matchData, playerID }: Props) => {
           {x === playerID && (
             <>
               {' '}
-              <Badge variant="outline" size="xs" color={playerIDColor[x]}>
+              <Badge
+                sx={{ verticalAlign: 'middle' }}
+                variant="outline"
+                color={playerIDColor[x]}
+              >
                 You
               </Badge>
             </>
@@ -50,16 +62,23 @@ const MatchInfo = ({ G, matchID, ctx, matchData, playerID }: Props) => {
         Round: {Math.min(G.round.max, G.round.current)}/{G.round.max}
       </Text>
       <Text>
-        Phase: {ctx.gameover ? 'Game End' : U.phaseLabel(ctx.phase as C.Phase)}
-      </Text>
-      <Text>
         Turn: {G.turn.current}/{G.turn.max}
       </Text>
-      <Text>
-        Special Stage: {G.specialIndex + 1}/{G.specials.length}
-      </Text>
       <Text>Deck Size: {G.deck.length}</Text>
-
+      Passing: {!G.passBothWays || G.round.current % 2 === 1 ? 'Down' : 'Up'}
+      <Card.Section>
+        <Divider my={4} />
+      </Card.Section>
+      <Text>
+        Phase: {ctx.gameover ? 'Game End' : U.phaseLabel(ctx.phase as C.Phase)}
+      </Text>
+      <Text></Text>
+      <Text>
+        Special Stage:{' '}
+        {G.specials.length === 0
+          ? 'N/A'
+          : `${G.specialIndex + 1}/${G.specials.length}`}
+      </Text>
       <Card.Section>
         {G.playOrder.map((x) => (
           <ScoreView key={x} x={x} />

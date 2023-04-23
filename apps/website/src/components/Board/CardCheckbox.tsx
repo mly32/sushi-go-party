@@ -18,11 +18,11 @@ interface StyleParams {
   color: MantineColor;
 }
 
+const cardWidth = 100;
+const cardHeight = (cardWidth / CARD_WIDTH) * CARD_HEIGHT;
+
 const useStyles = createStyles(
   (theme, { boldColor, color }: StyleParams, getRef) => {
-    const cardWidth = 100;
-    const cardHeight = (cardWidth / CARD_WIDTH) * CARD_HEIGHT;
-
     const inputWidth = cardWidth + 4;
     const inputHeight = cardHeight + 4;
     const checkedColor = color

@@ -118,6 +118,7 @@ const setup: C.Game['setup'] = (
     selectionName: 'My First Meal',
     numPlayers: ctx.numPlayers,
     customSelection: [],
+    passBothWays: false,
   }
 ) => {
   if (validateSetupData(setupData, ctx.numPlayers) !== undefined) {
@@ -161,8 +162,9 @@ const setup: C.Game['setup'] = (
 
   const G: C.GameState = {
     selectionName: setupData.selectionName,
-    dessert,
     selection,
+    passBothWays: setupData.passBothWays,
+    dessert,
     playOrder: ctx.playOrder,
     players,
     specials: [],
@@ -422,7 +424,7 @@ const rotatePhase: C.PhaseConfig = {
     const hands = G.playOrder.map((x) => [...G.players[x].hand]);
 
     const n = G.playOrder.length;
-    const d = G.round.current % 2 === 0 ? 1 : n - 1;
+    const d = !G.passBothWays || G.round.current % 2 === 1 ? n - 1 : 1;
 
     G.playOrder.forEach((x, i) => {
       G.players[x].hand = hands[(i + d) % n];

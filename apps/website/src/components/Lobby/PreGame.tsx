@@ -112,7 +112,7 @@ const PreGame = ({ matchID }: PreGameProps) => {
             {isPlayer && (
               <>
                 {' '}
-                <Badge variant="outline" size="sm">
+                <Badge sx={{ verticalAlign: 'middle' }} variant="outline">
                   You
                 </Badge>
               </>

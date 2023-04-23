@@ -129,7 +129,6 @@ const Tray = ({
               color="dark"
               w="100%"
               compact
-              // radius={0}
               onClick={open}
               mb={5}
             >

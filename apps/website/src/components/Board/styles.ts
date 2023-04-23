@@ -41,6 +41,9 @@ export const useStyles = createStyles((theme) => {
       borderRadius: 0,
       background: 'none',
     },
+    logIcon: {
+      verticalAlign: 'middle',
+    },
     dessertIcon: {
       verticalAlign: 'baseline',
       filter: `drop-shadow(0px 0px 1px black)`,
