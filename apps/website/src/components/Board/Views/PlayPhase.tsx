@@ -1,4 +1,4 @@
-import { SimpleGrid } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import { C, V } from '@sushi-go-party/sushi-go-game';
 import { useState } from 'react';
 
@@ -80,32 +80,40 @@ const PlayPhase = (props: Props) => {
         onClick={handleConfirm}
       />
 
-      <SimpleGrid cols={2} w="fit-content" verticalSpacing={0}>
-        <ListActionSelect
-          {...props}
-          wrapperProps={{
-            label: 'Select a card',
-            description: 'from your hand',
-          }}
-          action={handAction}
-        />
-        <ListActionSelect
-          {...props}
-          wrapperProps={{
-            label: 'Copy a card',
-            description: 'from your tray',
-          }}
-          action={copyAction}
-        />
-        <ListActionSelect
-          {...props}
-          wrapperProps={{
-            label: 'Select a bonus card',
-            description: 'from your tray',
-          }}
-          action={bonusAction}
-        />
-      </SimpleGrid>
+      <Grid gutter={'xs'}>
+        <Grid.Col span={6}>
+          <ListActionSelect
+            {...props}
+            wrapperProps={{
+              label: 'Select a card',
+              description: 'from your hand',
+            }}
+            action={handAction}
+          />
+        </Grid.Col>
+        {G.players[x].hand.includes('SpecialOrder') && (
+          <Grid.Col span={6}>
+            <ListActionSelect
+              {...props}
+              wrapperProps={{
+                label: 'Copy a card',
+                description: 'from your tray',
+              }}
+              action={copyAction}
+            />
+          </Grid.Col>
+        )}
+        <Grid.Col span={6}>
+          <ListActionSelect
+            {...props}
+            wrapperProps={{
+              label: 'Select a bonus card',
+              description: 'from your tray',
+            }}
+            action={bonusAction}
+          />
+        </Grid.Col>
+      </Grid>
 
       <PhaseView
         {...props}

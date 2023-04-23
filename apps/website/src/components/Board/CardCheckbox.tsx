@@ -44,8 +44,10 @@ const useStyles = createStyles(
         height: cardHeight - 8,
 
         [`.${getRef('card')}`]: {
-          border: 'none',
           borderRadius: theme.fn.radius('sm'),
+          border: 'none',
+          width: cardWidth - 8,
+          height: cardHeight - 8,
         },
       },
     };
@@ -66,8 +68,8 @@ const useStyles = createStyles(
         ref: getRef('card'),
         borderRadius: theme.fn.radius('md'),
         border: `1px solid ${borderColor}`,
-        width: '100%',
-        height: '100%',
+        width: cardWidth,
+        height: cardHeight,
       },
       body: {
         display: 'block-flex',
@@ -85,7 +87,6 @@ const useStyles = createStyles(
         transform: 'none',
         transitionProperty: 'all',
         pointerEvents: 'none',
-
         width: cardWidth,
         height: cardHeight,
       },

@@ -24,6 +24,12 @@ const GameOver = ({ ctx, playerID: x, matchData }: Props) => {
       </>
     );
 
+  const scoreLabel = (score: number) =>
+    score === 1 ? '1 score' : `${score} points`;
+
+  const dessertLabel = (dessert: number) =>
+    dessert === 1 ? '1 dessert' : `${dessert} desserts`;
+
   return (
     <>
       <Title mb={0}>Game Over</Title>
@@ -36,17 +42,14 @@ const GameOver = ({ ctx, playerID: x, matchData }: Props) => {
                 <Text span c={playerIDColor[y]} fw="bold">
                   {matchData[y].name ?? y}
                 </Text>
-                : {score} points ({desserts} desserts)
+                : {scoreLabel(score)} ({dessertLabel(desserts)})
               </Text>
-              Scores:
               <List withPadding listStyleType="disc">
-                {/* roundScores: number[];
-  dessertScore: number; */}
                 {[
                   ...roundScores.map(
-                    (s, index) => `round ${index + 1} score: ${s}`
+                    (s, index) => `Round ${index + 1}: ${scoreLabel(s)}`
                   ),
-                  `dessert score: ${dessertScore}`,
+                  `Dessert: ${scoreLabel(dessertScore)}`,
                 ].map((x, index) => (
                   <List.Item key={index}>{x}</List.Item>
                 ))}
