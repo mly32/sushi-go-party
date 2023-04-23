@@ -1,6 +1,6 @@
 import { ActivePlayers, INVALID_MOVE, Stage } from 'boardgame.io/core';
 
-import { CONFIG } from './config';
+import { CONFIG } from '../config';
 import * as C from './constants';
 import * as M from './move';
 import * as S from './score';
@@ -118,6 +118,7 @@ const setup: C.Game['setup'] = (
     selectionName: 'My First Meal',
     numPlayers: ctx.numPlayers,
     customSelection: [],
+    passBothWays: false,
   }
 ) => {
   if (validateSetupData(setupData, ctx.numPlayers) !== undefined) {
@@ -162,6 +163,8 @@ const setup: C.Game['setup'] = (
   const G: C.GameState = {
     selectionName: setupData.selectionName,
     selection,
+    passBothWays: setupData.passBothWays,
+    dessert,
     playOrder: ctx.playOrder,
     players,
     specials: [],
@@ -178,11 +181,11 @@ const setup: C.Game['setup'] = (
 
 const endIf: C.Game['endIf'] = ({ G }) => {
   if (G.round.current > G.round.max) {
-    const finalScore = G.playOrder.map((x) => S.playerScore(G, x));
-    finalScore.sort((a, b) =>
+    const finalScores = S.playerScores(G);
+    finalScores.sort((a, b) =>
       b.score === a.score ? b.desserts - a.desserts : b.score - a.score
     );
-    return finalScore;
+    return finalScores;
   }
 };
 
@@ -421,7 +424,7 @@ const rotatePhase: C.PhaseConfig = {
     const hands = G.playOrder.map((x) => [...G.players[x].hand]);
 
     const n = G.playOrder.length;
-    const d = G.round.current % 2 === 0 ? 1 : n - 1;
+    const d = !G.passBothWays || G.round.current % 2 === 1 ? n - 1 : 1;
 
     G.playOrder.forEach((x, i) => {
       G.players[x].hand = hands[(i + d) % n];
@@ -436,16 +439,20 @@ const rotatePhase: C.PhaseConfig = {
 
 const scorePhase: C.PhaseConfig = {
   next: 'setupPhase',
-  endIf: ({ G }) => G.playOrder.every((x) => G.players[x].confirmed),
+  endIf: ({ G }) => {
+    return G.playOrder.every((x) => G.players[x].confirmed);
+  },
   onBegin: ({ G }) => {
     S.scoreUpdater(G, true);
+    G.playOrder.forEach((x) => {
+      G.players[x].roundScores.push(G.players[x].score);
+    });
     G.log.push({ msg: `round ${G.round.current} score` });
   },
   onEnd: ({ G }) => {
     M.moveCardIf(G, '', 'discard', '', 'deck', () => true);
 
-    const dessert = C.dessertFromSelection(G.selection);
-    const isDessert = (card: C.Card) => C.cardToTile[card] === dessert;
+    const isDessert = (card: C.Card) => C.cardToTile[card] === G.dessert;
 
     G.playOrder.forEach((x) => {
       M.moveCardIf(G, x, 'tray', x, 'fridge', isDessert);

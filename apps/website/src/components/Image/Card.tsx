@@ -2,6 +2,8 @@ import { Box, Tooltip } from '@mantine/core';
 import { C, U } from '@sushi-go-party/sushi-go-game';
 import { SVGProps } from 'react';
 
+import { CARD_POSITION } from '../../constants';
+
 const CARD_SIZE_INFO = [
   [3138, 6],
   [3360, 10],
@@ -14,7 +16,7 @@ interface CardImageProps extends SVGProps<SVGImageElement> {
 }
 
 const CardImage = ({ card, ...props }: CardImageProps) => {
-  const pos = C.cardPosition[card];
+  const pos = CARD_POSITION[card];
 
   return (
     <image

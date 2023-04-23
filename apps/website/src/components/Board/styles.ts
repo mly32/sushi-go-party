@@ -33,13 +33,16 @@ export const useStyles = createStyles((theme) => {
       backgroundImage: `${darken}url(/assets/fridge/fridge_closed.png)`,
       backgroundSize: '100% 100%',
       width: 110,
-      height: 165,
+      height: 160,
     },
     notification: {
       boxShadow: 'none',
       borderWidth: '1px 0px 1px 0px',
       borderRadius: 0,
       background: 'none',
+    },
+    logIcon: {
+      verticalAlign: 'middle',
     },
     dessertIcon: {
       verticalAlign: 'baseline',

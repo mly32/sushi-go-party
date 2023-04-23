@@ -1,6 +1,7 @@
 import { C, U } from '@sushi-go-party/sushi-go-game';
 import { CSSProperties } from 'react';
 
+import { TILE_POSITION } from '../../../constants';
 import styles from './styles.module.css';
 
 const tileSizeInfo = [
@@ -24,7 +25,7 @@ const Selection = ({ numPlayers, list }: SelectionProps) => {
   return (
     <div className={styles['row-container']}>
       {list.map((tile, index) => {
-        const position = C.tilePosition[tile](numPlayers);
+        const position = TILE_POSITION[tile](numPlayers);
         const info: CSSProperties = {
           backgroundSize: `${tileSizeInfo[1][1] * 100}%`,
           backgroundPositionY: -position[0] * tileSize[0] * scale,

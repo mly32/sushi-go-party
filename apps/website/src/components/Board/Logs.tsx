@@ -20,19 +20,19 @@ const Logs = ({ G, matchData }: Props) => {
             color={playerIDColor[playerID] ?? gameColor}
             className={classes.notification}
           >
-            {playerID ? (
-              <Text span c={playerIDColor[playerID]} fw="bold">
-                {matchData[playerID].name ?? playerID}
-              </Text>
-            ) : (
-              <IconInfoCircle
-                style={{
-                  verticalAlign: 'bottom',
-                }}
-                size={theme.fontSizes.lg}
-              />
-            )}{' '}
-            {msg}
+            <Text>
+              {playerID ? (
+                <Text span c={playerIDColor[playerID]} fw="bold">
+                  {matchData[playerID].name ?? playerID}
+                </Text>
+              ) : (
+                <IconInfoCircle
+                  className={classes.logIcon}
+                  size={theme.fontSizes.lg}
+                />
+              )}{' '}
+              {msg}
+            </Text>
           </Notification>
         ))}
     </Flex>

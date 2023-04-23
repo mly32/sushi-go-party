@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Divider,
   Grid,
   Group,
@@ -100,19 +101,23 @@ const CreateMatch = ({
           selectionName: matchData.setupData.selectionName,
           selection: fromSelectionList(matchData.setupData.customSelection),
           gameType: matchData.gameType,
+          passBothWays: matchData.setupData.passBothWays,
         }
       : {
           numPlayers: SushiGo.minPlayers,
           selectionName: 'Custom' as C.Selection,
           selection: fromSelectionName('My First Meal'),
           gameType: GameType.Public,
+          passBothWays: false,
         },
     validate: (values) => {
-      const { numPlayers, selectionName, selection, gameType } = values;
+      const { numPlayers, selectionName, selection, passBothWays, gameType } =
+        values;
       const setupData: C.SetupData = {
         numPlayers,
         selectionName,
         customSelection: toSelectionList(selection),
+        passBothWays,
       };
       return {
         numPlayers:
@@ -161,11 +166,13 @@ const CreateMatch = ({
   }, [values.selectionName, setFieldValue]);
 
   const handleSubmit: Parameters<typeof form.onSubmit>[0] = (values) => {
-    const { numPlayers, selectionName, selection, gameType } = values;
+    const { numPlayers, selectionName, selection, passBothWays, gameType } =
+      values;
     const setupData: C.SetupData = {
       numPlayers,
       selectionName,
       customSelection: toSelectionList(selection),
+      passBothWays,
     };
     callback({ setupData, gameType });
   };
@@ -183,7 +190,9 @@ const CreateMatch = ({
           .map((group) => {
             const selectReadOnly = form.values.selectionName !== 'Custom';
             const selectLabel = `${U.groupLabel(group)}${
-              selectReadOnly ? '' : ` (pick ${V.validGroupCounts[group]})`
+              selectReadOnly || group === 'Nigiri'
+                ? ''
+                : ` (pick ${V.validGroupCounts[group]})`
             }`;
 
             const numPlayers = form.values.numPlayers;
@@ -217,7 +226,7 @@ const CreateMatch = ({
                   classNames={{ label: classes.selectLabel }}
                   clearable
                   maxSelectedValues={V.validGroupCounts[group]}
-                  readOnly={selectReadOnly}
+                  readOnly={selectReadOnly || group === 'Nigiri'}
                   overData={groupTiles}
                   {...form.getInputProps(`selection.${group}`)}
                 />
@@ -230,6 +239,9 @@ const CreateMatch = ({
 
   const readOnly = matchData !== null;
 
+  const numberLabel =
+    'Number of players ' + `(${SushiGo.minPlayers}-${SushiGo.maxPlayers})`;
+
   return (
     <form onSubmit={form.onSubmit(handleSubmit)}>
       {title && (
@@ -240,7 +252,7 @@ const CreateMatch = ({
       )}
 
       <Grid gutter="xs" gutterXs="md" grow>
-        <Grid.Col xs={12} md={4}>
+        <Grid.Col span={6} md={3}>
           <Radio.Group
             label="Game type"
             {...form.getInputProps('gameType')}
@@ -251,16 +263,26 @@ const CreateMatch = ({
             ))}
           </Radio.Group>
         </Grid.Col>
-        <Grid.Col xs={6} md={4}>
+        <Grid.Col span={6} md={3}>
+          <Input.Wrapper label="Variant">
+            <Checkbox
+              pt="xs"
+              label="Pass both ways"
+              {...form.getInputProps('passBothWays', { type: 'checkbox' })}
+              {...(readOnly ? { onChange: () => {} } : {})}
+            />
+          </Input.Wrapper>
+        </Grid.Col>
+        <Grid.Col xs={6} md={3}>
           <NumberInput
-            label="Number of players"
+            label={numberLabel}
             min={SushiGo.minPlayers}
             max={SushiGo.maxPlayers}
             {...form.getInputProps('numPlayers')}
             readOnly={readOnly}
           />
         </Grid.Col>
-        <Grid.Col xs={6} md={4}>
+        <Grid.Col xs={6} md={3}>
           <SelectionNameSelect
             label="Menu selection"
             numPlayers={form.values.numPlayers}
@@ -277,6 +299,8 @@ const CreateMatch = ({
         {toSelectionList(form.values.selection).map((tile) => (
           <Tile
             key={tile}
+            tooltip
+            showModal
             tile={tile}
             numPlayers={form.values.numPlayers}
             width={110}

@@ -17,6 +17,7 @@ const Lobby = () => {
     selectionName: 'My First Meal',
     numPlayers: SushiGo.minPlayers,
     customSelection: [],
+    passBothWays: false,
   });
 
   const [customSelection, setCustomSelection] =

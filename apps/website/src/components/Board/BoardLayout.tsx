@@ -21,13 +21,13 @@ import { useEffect, useState } from 'react';
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from '../Layout';
 import Icon from '../UI/Icon';
 
+const SIDE_WIDTH = 250;
+const BORDER_WIDTH = 2;
+const BUTTON_OFFSET = 8;
+const TABS_LIST = 40;
+
 const useStyles = createStyles(
   (theme, { left, right }: { left: boolean; right: boolean }, getRef) => {
-    const SIDE_WIDTH = 250;
-    const BORDER_WIDTH = 2;
-    const BUTTON_OFFSET = 8;
-    const TABS_LIST = 40;
-
     const gameHeight = `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT}px)`;
     const gameWidth = `calc(100vw - ${
       (left ? SIDE_WIDTH : 0) + (right ? SIDE_WIDTH : 0)
@@ -105,6 +105,15 @@ interface BoardLayoutProps {
   allLeft?: boolean;
 }
 
+const Panel = ({ children, ...props }: TabsPanelProps) => {
+  const { classes } = useStyles({ left: false, right: false });
+  return (
+    <Tabs.Panel {...props}>
+      <ScrollArea className={classes.scrollPanel}>{children}</ScrollArea>
+    </Tabs.Panel>
+  );
+};
+
 const BoardLayout = ({
   matchInfo,
   log,
@@ -119,14 +128,6 @@ const BoardLayout = ({
   const { classes, cx } = useStyles({ left, right });
 
   const alwaysShow = useMediaQuery('(min-width: 1280px)');
-
-  const Panel = ({ children, ...props }: TabsPanelProps) => {
-    return (
-      <Tabs.Panel {...props}>
-        <ScrollArea className={classes.scrollPanel}>{children}</ScrollArea>
-      </Tabs.Panel>
-    );
-  };
 
   useEffect(() => {
     if (alwaysShow) {

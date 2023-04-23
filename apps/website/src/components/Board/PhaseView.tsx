@@ -35,11 +35,9 @@ export interface PhaseViewProps extends Props {
 type Dessert = 'fruit1' | 'fruit2' | 'fruit3' | 'greenteaicecream' | 'pudding';
 
 const total = (G: C.GameState, y: C.PlayerID): [number, Dessert][] => {
-  const dessert = C.dessertFromSelection(G.selection);
-
-  if (dessert === 'Pudding') {
+  if (G.dessert === 'Pudding') {
     return [[G.players[y].fridge.length, 'pudding']];
-  } else if (dessert === 'GreenTeaIceCream') {
+  } else if (G.dessert === 'GreenTeaIceCream') {
     return [[G.players[y].fridge.length, 'greenteaicecream']];
   }
   const totals = U.fruitTotal(G.players[y].fridge);
@@ -90,7 +88,7 @@ const Tray = ({
   const list = total(G, y);
 
   return (
-    <Card withBorder>
+    <Card p="xs" withBorder>
       <Modal
         size="xl"
         opened={opened}
@@ -131,9 +129,8 @@ const Tray = ({
               color="dark"
               w="100%"
               compact
-              radius={0}
               onClick={open}
-              disabled={G.players[y].fridge.length === 0}
+              mb={5}
             >
               Desserts
             </Button>
@@ -198,7 +195,7 @@ const PhaseView = (props: PhaseViewProps) => {
   return (
     <Stack my="sm" spacing="sm">
       {menuAction && (
-        <Card p="sm" withBorder>
+        <Card p="xs" withBorder>
           <Text>Menu Hand</Text>
 
           <Card.Section className={classes.hand} inheritPadding>
@@ -214,7 +211,7 @@ const PhaseView = (props: PhaseViewProps) => {
       )}
 
       {x && !hideHand && (
-        <Card p="sm" withBorder>
+        <Card p="xs" withBorder>
           <Text>Hand</Text>
 
           <Card.Section className={classes.hand} inheritPadding>

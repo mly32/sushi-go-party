@@ -53,6 +53,7 @@ const TopInfo = ({ G, ctx }: Props) => {
                 <Tile
                   key={index}
                   tooltip
+                  showModal
                   tile={tile}
                   numPlayers={ctx.numPlayers}
                 />
