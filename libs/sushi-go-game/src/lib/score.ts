@@ -52,7 +52,7 @@ export const tileToScorer: Record<C.Tile, Scorer> = {
     ];
 
     return playerObj(G, (x) => {
-      scores[G.playOrder.length <= 5 ? 0 : 1].forEach((v, i) => {
+      scores[G.playOrder.length <= 1 ? 0 : 1].forEach((v, i) => {
         if (
           placements[i] &&
           counts[x] > 0 &&

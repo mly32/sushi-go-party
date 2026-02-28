@@ -32,6 +32,9 @@ const useStyles = createStyles(
     const gameWidth = `calc(100vw - ${
       (left ? SIDE_WIDTH : 0) + (right ? SIDE_WIDTH : 0)
     }px)`;
+    const scrollPanelHeight = `calc(100vh - ${
+      HEADER_HEIGHT + FOOTER_HEIGHT + TABS_LIST
+    }px)`;
 
     const radius = '50%';
 
@@ -91,7 +94,7 @@ const useStyles = createStyles(
       },
       scrollbar: {},
       scrollPanel: {
-        height: `calc(100vh - ${HEADER_HEIGHT + FOOTER_HEIGHT + TABS_LIST}px)`,
+        height: scrollPanelHeight,
       },
     };
   }
